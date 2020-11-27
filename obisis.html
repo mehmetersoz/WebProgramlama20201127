@@ -1,0 +1,3348 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="headDefault"><title>
+	
+        Erciyes Öğrenci Bilgi Sistemi 
+    
+</title><link href="https://obisis.erciyes.edu.tr/obisis.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript">
+       setTimeout("blinkFont()", 1000);
+        function blinkFont() {
+            var blink1 = document.getElementById("blink1");
+	    if (blink1) {
+		blink1.style.color = "red";
+		setTimeout("setblinkFont()", 1000);
+            }
+        }
+
+        function setblinkFont() {
+            var blink1 = document.getElementById("blink1");	    
+            if (blink1) {
+		blink1.style.color = "";
+                setTimeout("blinkFont()", 1000);
+            }
+        }
+        function windowOpen(duyuruGoster) {
+            //duyuruGoster = false;            
+          //  if (duyuruGoster)                
+            //  window.open('duyuru.aspx', '_blank', 'menubar=Yes,toolbar=No,resizable=Yes,scrollbars=Yes,status=yes,top=120,left=250,width=900px,height=800px');
+        }
+        function randevuYazdir() {
+            window.open('RandevuYazdir.aspx', '_blank', 'menubar=Yes,toolbar=No,resizable=Yes,scrollbars=Yes,status=yes,top=20,left=50,width=1100px,height=900px');
+        }
+        function uyar() {
+            var qrystr = window.location.search.substring(1);
+            if (qrystr.indexOf('u=1&y=1&i=1') > -1)
+                alert('Ön kaydınız başarılı bir şekilde yapıldı, intibak (ders saydırma) işlemleri ve kesin kayıt için kesin kayıt tarihinizde Öğrenci İşleri Merkezine bizzat başvurmanız gerekmektedir.');
+            else if (qrystr.indexOf('u=1&y=1') > -1)
+                alert('Ön kaydınız başarılı bir şekilde yapıldı, kesin kayıt tarihinizde Öğrenci İşleri Merkezine bizzat başvurarak kesin kaydınızı yaptırmanız gerekmektedir.');
+            else if (qrystr.indexOf('u=1&r=0&i=1&m=1') > -1)
+                alert('Geçici kaydınız başarılı bir şekilde yapıldı fakat lise mezuniyet belgenizi getirdiğinizde kesin kayda çevrilecektir, intibak (ders saydırma) işlemleri için en kısa sürede Öğrenci İşleri Merkezine bizzat başvurmanız gerekmektedir !');
+            else if (qrystr.indexOf('u=1&r=0&i=1') > -1)
+                alert('Kesin kaydınız başarılı bir şekilde yapıldı ancak intibak (ders saydırma) işlemleri için en kısa sürede Öğrenci İşleri Merkezine bizzat başvurmanız gerekmektedir.');            
+            else if (qrystr.indexOf('u=1&r=0&m=1') > -1)
+                alert('Geçici kaydınız başarılı bir şekilde yapıldı fakat lise mezuniyet belgenizi getirdiğinizde kesin kayda çevrilecektir !');
+            else if (qrystr.indexOf('u=1&r=0') > -1)
+                alert('Kesin kaydınız başarılı bir şekilde yapıldı, bizzat başvurmanıza gerek yoktur, ders kayıt döneminde ders kaydı yapmayı ihmal etmeyiniz');
+            else if (qrystr.indexOf('u=1&m=1&i=1') > -1)
+                alert('Geçici kaydınız başarılı bir şekilde yapıldı fakat lise mezuniyet belgenizi getirdiğinizde kesin kayda çevrilecektir, intibak (ders saydırma) işlemleri için de en kısa sürede Öğrenci İşleri Merkezine bizzat başvurmanız gerekmektedir.');
+            else if (qrystr.indexOf('u=1&m=1') > -1)
+                alert('Geçici kaydınız başarılı bir şekilde yapıldı fakat lise mezuniyet belgenizi getirdiğinizde kesin kayda çevrilecektir');
+            else if (qrystr.indexOf('u=1&i=1') > -1)
+                alert('Ön kaydınız başarılı bir şekilde yapıldı, kesin kayıt tarihinde okulunuzda kesin kaydınızı yaptıktan sonra intibak (ders saydırma) işlemleri için Öğrenci İşleri Merkezine bizzat başvurmanız gerekmektedir.');  
+            else if (qrystr.indexOf('u=1&e=1') > -1)
+                alert('Ön kaydınız başarılı bir şekilde yapıldı, kayıt için istenen belgelerinizi enstitukayit@erciyes.edu.tr e-posta adresine göndermeniz gerekmektedir. Belgelerinde ve bilgilerinde eksiklik tespit edilen öğrencilerin kayıtları iptal edileceğinden; belge ve bilgilerinizi eksiksiz ve doğru göndermeniz gerekmektedir.');
+            else if (qrystr.indexOf('u=1') > -1)
+                alert('Ön kaydınız başarılı bir şekilde yapıldı, kesin kayıt tarihinde okulunuzda kesin kaydınızı bizzat yapmanız gerekmektedir !');
+            //alert('Ön kaydınız başarılı bir şekilde yapıldı, kesin kayıt randevunuzu almak için lütfen Kesin Kayıt Randevusu sekmesini kullanınız !');
+        }  
+        function mezunDurumundaUyar(check) {          
+            if (window.confirm('Mezun durumundayım bütünleme hakkımı kullanmak istemiyorum çentiğini işaretlediğinizde sonradan vazgeçme hakkınız olmamaktadır, bütünlemelere kesinlikle girmeden mezun olmak istiyorsanız bu çentiği işaretlemeniz önerilir. Emin misiniz ?') == false) {
+                check.checked = false;
+                return false;
+            }
+            else            
+                return true;                                       
+        }
+        function yokKarariHazirlikUyar(check) {
+            if (window.confirm('Yök kararı ile hazırlıktan muaf olarak mezun olmak istediğinizden emin misiniz ?') == false) {
+                check.checked = false;
+                return false;
+            }
+            else
+                return true;
+        } 
+        function tabKontrol() {
+            let localStorageTimeout = 15 * 1000; // 15,000 milliseconds = 15 seconds.
+            let localStorageResetInterval = 10 * 1000; // 10,000 milliseconds = 10 seconds.
+            let localStorageTabKey = 'test-application-browser-tab';
+            let sessionStorageGuidKey = 'browser-tab-guid';
+
+            function createGUID() {
+                let guid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+                    /*eslint-disable*/
+                    let r = Math.random() * 16 | 0,
+                        v = c == 'x' ? r : (r & 0x3 | 0x8);
+                    /*eslint-enable*/
+                    return v.toString(16);
+                });
+
+                return guid;
+            }
+
+            /**
+             * Compare our tab identifier associated with this session (particular tab)
+             * with that of one that is in localStorage (the active one for this browser).
+             * This browser tab is good if any of the following are true:
+             * 1.  There is no localStorage Guid yet (first browser tab).
+             * 2.  The localStorage Guid matches the session Guid.  Same tab, refreshed.
+             * 3.  The localStorage timeout period has ended.
+             *
+             * If our current session is the correct active one, an interval will continue
+             * to re-insert the localStorage value with an updated timestamp.
+             *
+             * Another thing, that should be done (so you can open a tab within 15 seconds of closing it) would be to do the following (or hook onto an existing onunload method):
+             *      window.onunload = () => { 
+                            localStorage.removeItem(localStorageTabKey);
+                  };
+             */
+            function testTab() {
+                let sessionGuid = sessionStorage.getItem(sessionStorageGuidKey) || createGUID();
+                let tabObj = JSON.parse(localStorage.getItem(localStorageTabKey)) || null;
+
+                sessionStorage.setItem(sessionStorageGuidKey, sessionGuid);
+
+                // If no or stale tab object, our session is the winner.  If the guid matches, ours is still the winner
+                if (tabObj === null || (tabObj.timestamp < new Date().getTime() - localStorageTimeout) || tabObj.guid === sessionGuid) {
+                    function setTabObj() {
+                        let newTabObj = {
+                            guid: sessionGuid,
+                            timestamp: new Date().getTime()
+                        };
+                        localStorage.setItem(localStorageTabKey, JSON.stringify(newTabObj));
+                    }
+                    setTabObj();
+                    setInterval(setTabObj, localStorageResetInterval);
+                    return true;
+                } else {
+                    // An active tab is already open that does not match our session guid.
+                    return false;
+                }
+            }
+
+            if (testTab()) {
+                //alert('tab is good');
+                //document.getElementById('result').innerHTML = 'tab is good';
+            } else {
+                alert('Daha önce giriş yapmıştınız, yeni pencerede öbisisi açamazsınız !');                           
+                window.location.replace('https://obisis.erciyes.edu.tr/Cikis.aspx?a=0');
+                //document.getElementById('result').innerHTML = 'tab is bad';
+            }
+        }      
+       // function stajDuyuruGoster() {
+         //   window.open('duyuru.aspx', '_blank', 'menubar=Yes,toolbar=No,resizable=Yes,scrollbars=Yes,status=yes,top=120,left=250,width=900px,height=800px');
+            //if (window.confirm('Üniversitemiz artık staj için SGK işe Giriş ve Çıkış Bildirgeleri yapmayacaktır.  Mağduriyet yaşamamanız için staja başlamadan önce staj yapacağınız işletmeye SGK İşe Giriş Bildirgesini yaptırmanız gerekmektedir.SGK İşlemi yapılmaksızın staj yaptığım taktirde sorumluluğun tamamen bana ait olduğunu kabul ediyorum. Duyuruyu okuduğunuzu ve kabul ettiğinizi onaylıyor musunuz ?') == false) {
+              //  check.checked = false;
+                //return false;
+            //}
+            //else
+              //  return true;
+        //}
+    </script>
+</head> 
+<body id="bodyDefault" style="margin:0" onpageshow="tabKontrol();">
+    
+    <form name="Form1" method="post" action="./" onsubmit="javascript:return WebForm_OnSubmit();" id="Form1">
+<div>
+<input type="hidden" name="tcmDefault_HiddenField" id="tcmDefault_HiddenField" value="" />
+<input type="hidden" name="__LASTFOCUS" id="__LASTFOCUS" value="" />
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" />
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKLTQyNTEyNjgwOQ9kFgICAw8WAh4Kb25wYWdlc2hvdwUNdGFiS29udHJvbCgpOxYEAgEPZBYGAgMPZBYGZg8PFgIeBFRleHQFEklQOjE3OC4yMzMuMTI1LjkyIGRkAgMPDxYCHgdWaXNpYmxlaGRkAgQPPCsACQEADxYEHghEYXRhS2V5cxYAHgtfIUl0ZW1Db3VudAIDZBYGZg9kFgICAQ8PFgoeCENzc0NsYXNzBQtTZWxlY3RlZFRhYh4LTmF2aWdhdGVVcmwFHURlZmF1bHQuYXNweD90YWJJbmQ9MCZ0YWJObz0wHwEFCUFuYSBTYXlmYR4JQmFja0NvbG9yCqQBHgRfIVNCAgpkZAIBD2QWAgIBDw8WBB8GBR5EZWZhdWx0LmFzcHg/dGFiSW5kPTEmdGFiTm89MTQfAQUIRG9zeWFsYXJkZAICD2QWAgIBDw8WBB8GBR5EZWZhdWx0LmFzcHg/dGFiSW5kPTImdGFiTm89MTUfAQUXU8Sxa8OnYSBTb3J1bGFuIFNvcnVsYXJkZAIFDxYCHwJnFgICAQ9kFgICBw8UKwADDxYGHhVFbmFibGVFbWJlZGRlZFNjcmlwdHNnHhJSZXNvbHZlZFJlbmRlck1vZGULKXJUZWxlcmlrLldlYi5VSS5SZW5kZXJNb2RlLCBUZWxlcmlrLldlYi5VSSwgVmVyc2lvbj0yMDIwLjMuOTE1LjQwLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPTEyMWZhZTc4MTY1YmEzZDQBHhdFbmFibGVBamF4U2tpblJlbmRlcmluZ2hkFgIeC0N1cnJlbnRHdWlkBSQzNzcwMjcwZS1kNDViLTQ2NDMtODZhMi04NTIyYThjZTdkMmMUKwADZGRkFgICAQ9kFgxmD2QWAmYPZBYIZg8PFgoeBkhlaWdodBsAAAAAAABAQAEAAAAeBVdpZHRoGwAAAAAAAF5AAQAAAB8FZR4ISW1hZ2VVcmwFXH4vVGVsZXJpay5XZWIuVUkuV2ViUmVzb3VyY2UuYXhkP3R5cGU9cmNhJmlzYz10cnVlJmd1aWQ9Mzc3MDI3MGUtZDQ1Yi00NjQzLTg2YTItODUyMmE4Y2U3ZDJjHwgCggNkZAIBDw8WAh8BZRYCHgV0aXRsZWVkAgIPFgQeCWlubmVyaHRtbAURICBLb2R1IERpbmxleWluaXoeBGhyZWYFZH4vVGVsZXJpay5XZWIuVUkuV2ViUmVzb3VyY2UuYXhkP3R5cGU9Y2FoJmFtcDtpc2M9dHJ1ZSZhbXA7Z3VpZD0zNzcwMjcwZS1kNDViLTQ2NDMtODZhMi04NTIyYThjZTdkMmNkAgMPFgQfEQUTRG93bmxvYWQgQXVkaW8gQ29kZR8SBWR+L1RlbGVyaWsuV2ViLlVJLldlYlJlc291cmNlLmF4ZD90eXBlPWNhaCZhbXA7aXNjPXRydWUmYW1wO2d1aWQ9Mzc3MDI3MGUtZDQ1Yi00NjQzLTg2YTItODUyMmE4Y2U3ZDJjZAIBDw8WCh8NGwAAAAAAAEBAAQAAAB8OGwAAAAAAAF5AAQAAAB8FZR8PBVx+L1RlbGVyaWsuV2ViLlVJLldlYlJlc291cmNlLmF4ZD90eXBlPXJjYSZpc2M9dHJ1ZSZndWlkPTM3NzAyNzBlLWQ0NWItNDY0My04NmEyLTg1MjJhOGNlN2QyYx8IAoIDZGQCAg8WBB8RBREgIEtvZHUgRGlubGV5aW5peh8SBWR+L1RlbGVyaWsuV2ViLlVJLldlYlJlc291cmNlLmF4ZD90eXBlPWNhaCZhbXA7aXNjPXRydWUmYW1wO2d1aWQ9Mzc3MDI3MGUtZDQ1Yi00NjQzLTg2YTItODUyMmE4Y2U3ZDJjZAIDDxYEHxEFE0Rvd25sb2FkIEF1ZGlvIENvZGUfEgVkfi9UZWxlcmlrLldlYi5VSS5XZWJSZXNvdXJjZS5heGQ/dHlwZT1jYWgmYW1wO2lzYz10cnVlJmFtcDtndWlkPTM3NzAyNzBlLWQ0NWItNDY0My04NmEyLTg1MjJhOGNlN2QyY2QCBA9kFgJmDxYEHxAFF01pc3NpbmcgQnJvd3NlciBQbHVnLUluHxEFF01pc3NpbmcgQnJvd3NlciBQbHVnLUluZAIFD2QWBGYPDxYKHwUFDnJjVGV4dEJveENsYXNzHglBY2Nlc3NLZXllHghUYWJJbmRleAEAAB4HVG9vbFRpcGUfCAICZGQCAQ8PFgYfBQUMcmNMYWJlbENsYXNzHwEFGkfDtnN0ZXJpbGVuIEtvZHUgWWF6xLFuxLF6HwgCAmRkAgcPFgIfAmcWAgIBD2QWAmYPZBYCAgEPDxYCHw8FD2ltYWdlcy9uZXdzLmdpZmRkAgMPDxYCHwEFcUVyY2l5ZXMgw5xuaXZlcnNpdGVzaSBlIC0gw5bEn3JlbmNpIEJpbGdpIFNpc3RlbWkgwqkgMTk5OS0yMDIwIEJpbGdpIMSwxZ9sZW0gRGFpcmUgQmHFn2thbmzEscSfxLEgWWF6xLFsxLFtIEdydWJ1ZGQYAgUeX19Db250cm9sc1JlcXVpcmVQb3N0QmFja0tleV9fFgEFEWN0bDAyJFJhZENhcHRjaGExBRFjdGwwMiRSYWRDYXB0Y2hhMQ8UKwACBSQzNzcwMjcwZS1kNDViLTQ2NDMtODZhMi04NTIyYThjZTdkMmMGAAAAAAAAAABkUQQii757UVpfS7x7UAgrgBp2KKktOh/V5F40uzHnyV8=" />
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['Form1'];
+if (!theForm) {
+    theForm = document.Form1;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<script src="https://obisis.erciyes.edu.tr/WebResource.axd?d=ARgER1s4cxb6DOV6f2s9AmXWzfzOys_4a4ORg2TvKt1Wrpplivhb8yXWmYeDbrJB52Ny2d6vjDy4JE7GO9M5azyOofTTFu-mcChX-Fx-OnY1&amp;t=637322063740000000" type="text/javascript"></script>
+
+
+<script src="https://obisis.erciyes.edu.tr/ScriptResource.axd?d=cCzgQuop7Fs-ZCJh7aLr7a0Q83obmODqI6oHXFYolL_gV3IKQkSX4jrL_Q39s2NlGzHUcuOz3BCr3VuAvSz-XhhRjAStqbXtf8dsZ68oHbntWEshW86BxkKxRD_DkUIC_Z7YyNun8p-Kjv3JarfCWpZdTyxGsL6gfB1S5w8TAD81&amp;t=ffffffffd3a02b01" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+var __cultureInfo = {"name":"tr-TR","numberFormat":{"CurrencyDecimalDigits":2,"CurrencyDecimalSeparator":".","IsReadOnly":true,"CurrencyGroupSizes":[3],"NumberGroupSizes":[3],"PercentGroupSizes":[3],"CurrencyGroupSeparator":",","CurrencySymbol":"₺","NaNSymbol":"NaN","CurrencyNegativePattern":1,"NumberNegativePattern":1,"PercentPositivePattern":2,"PercentNegativePattern":2,"NegativeInfinitySymbol":"-∞","NegativeSign":"-","NumberDecimalDigits":2,"NumberDecimalSeparator":".","NumberGroupSeparator":",","CurrencyPositivePattern":0,"PositiveInfinitySymbol":"∞","PositiveSign":"+","PercentDecimalDigits":2,"PercentDecimalSeparator":".","PercentGroupSeparator":",","PercentSymbol":"%","PerMilleSymbol":"‰","NativeDigits":["0","1","2","3","4","5","6","7","8","9"],"DigitSubstitution":1},"dateTimeFormat":{"AMDesignator":"ÖÖ","Calendar":{"MinSupportedDateTime":"\/Date(-62135596800000)\/","MaxSupportedDateTime":"\/Date(253402289999999)\/","AlgorithmType":1,"CalendarType":1,"Eras":[1],"TwoDigitYearMax":2029,"IsReadOnly":true},"DateSeparator":".","FirstDayOfWeek":1,"CalendarWeekRule":0,"FullDateTimePattern":"d MMMM yyyy dddd HH:mm:ss","LongDatePattern":"d MMMM yyyy dddd","LongTimePattern":"HH:mm:ss","MonthDayPattern":"d MMMM","PMDesignator":"ÖS","RFC1123Pattern":"ddd, dd MMM yyyy HH\u0027:\u0027mm\u0027:\u0027ss \u0027GMT\u0027","ShortDatePattern":"d.MM.yyyy","ShortTimePattern":"HH:mm","SortableDateTimePattern":"yyyy\u0027-\u0027MM\u0027-\u0027dd\u0027T\u0027HH\u0027:\u0027mm\u0027:\u0027ss","TimeSeparator":":","UniversalSortableDateTimePattern":"yyyy\u0027-\u0027MM\u0027-\u0027dd HH\u0027:\u0027mm\u0027:\u0027ss\u0027Z\u0027","YearMonthPattern":"MMMM yyyy","AbbreviatedDayNames":["Paz","Pzt","Sal","Çar","Per","Cum","Cmt"],"ShortestDayNames":["Pa","Pt","Sa","Ça","Pe","Cu","Ct"],"DayNames":["Pazar","Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi"],"AbbreviatedMonthNames":["Oca","Şub","Mar","Nis","May","Haz","Tem","Ağu","Eyl","Eki","Kas","Ara",""],"MonthNames":["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık",""],"IsReadOnly":true,"NativeCalendarName":"Miladi Takvim","AbbreviatedMonthGenitiveNames":["Oca","Şub","Mar","Nis","May","Haz","Tem","Ağu","Eyl","Eki","Kas","Ara",""],"MonthGenitiveNames":["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık",""]},"eras":[1,"MS",null,0]};//]]>
+</script>
+
+<script src="https://obisis.erciyes.edu.tr/ScriptResource.axd?d=sboTnffdbCKTbKh6QPnyVOiLlD8BfSXECEYKrCN2z3Rdi3AonWRiwN9RIPA-2MKxS8GwRW_WsowQB-FDRasEtozkgZ_pUfQb3tQjbkBVo4PY9kKasnDFPg2WAsI9GepK0&amp;t=27117261" type="text/javascript"></script>
+<script src="https://obisis.erciyes.edu.tr/ScriptResource.axd?d=Tzd2V0NNISatVKxoLdkThle5SpvhJf6NqlH4_ysTg2j-p-8MqHcP-vYs8djqt7JyhGVNjPDXYvXGxs1DdoUwHOgnBKHpd2Y9m0I3IY6x7uH_9u0muX2noOmlpWgPjkFGW9egAhBOgzqaMBPhNHqTAw2&amp;t=27117261" type="text/javascript"></script>
+<script src="https://obisis.erciyes.edu.tr/ScriptResource.axd?d=eLHjr2TZokagiaqYYMilHgPhw_qBhMQNClA6wzTArle_QeXWJ8olYl85Ynp4WlN-UUfwqhfFuHXtD9rLGYncn3LYmQMKRp8H4escCJtaAhavoRp_xW4V5dnEjKgTZu0oRlCLIY8zPcX3OV220EIUVQ2&amp;t=ffffffffed46ccc1" type="text/javascript"></script>
+<script src="https://obisis.erciyes.edu.tr/ScriptResource.axd?d=RAAMMTNqYRpPOW60vUCpaOfOLMg4wQG2eeODk9LqwVnXY3w6IgWlND7xykRHhDCM51-m0n9dco6tKGCEL7HQRrJbhgsnKjZL7Rg6u_lrQbcO7dZx7fkP4uM2ls10gQ2c5VnNMggF23YV0iKaGqze1Q2&amp;t=ffffffffed46ccc1" type="text/javascript"></script>
+<script src="https://obisis.erciyes.edu.tr/WebResource.axd?d=6yeMzRFeS0H6QKyKLW7PXzpsMbhVlmAOqgs-dDd1520oJJt9Z5SdpIgT2wmiYICkysYUOb-LT0GP_pVeKFvYBLkqC3p7yimp0lfVWM-x_LI1&amp;t=637322063740000000" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+function WebForm_OnSubmit() {
+if (typeof(ValidatorOnSubmit) == "function" && ValidatorOnSubmit() == false) return false;
+return true;
+}
+//]]>
+</script>
+
+<div>
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="CA0B0334" />
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEdAAe068juD1obw10dOUdHPR7WRG+AeLhvFj/s7z3ArrrO5syWlXObiGgqj2+F4x6p6lMXXghP4fVcYZOHhQ5o0tbSIX/0tU9/eex9C2iBKduR+WOlAcYkbJKDV2ONqwcWrKCa83Op35oHfpfnsU2MkLE51VLO6KzYz2vrqGwmEsElNWHCAI5pOCRDQwyUzOJ3dMM=" />
+</div>
+        <div>
+        <script type="text/javascript">
+//<![CDATA[
+Sys.WebForms.PageRequestManager._initialize('tcmDefault', 'Form1', ['tctl02$RadCaptcha1$ctl01',''], ['ctl02$RadCaptcha1$CaptchaLinkButton',''], [], 90, '');
+//]]>
+</script>
+
+        <table cellspacing="0" cellpadding="0" width="100%" border="0">
+            <tbody>
+                <tr valign="top">
+                    <td>
+                        
+<table class="HeadAp" cellspacing="0" width="100%" border="0">
+    <tbody>
+        <tr valign="top">
+            <td class="SiteLink" align="right" background="https://obisis.erciyes.edu.tr/images/bars.gif" colspan="3">
+                <span id="Banner1_lblWellcomeMsg" style="color:#EEEEEE;">IP:178.233.125.92 </span>
+                
+                
+                &nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td width="10" rowspan="2">
+                &nbsp;
+            </td>
+            <td height="110" valign="middle">
+                <table>
+                    <tr>
+                        <td>
+                            <img src="https://obisis.erciyes.edu.tr/images/obisis.gif" id="Banner1_imgLogo" alt="obisisLogo" /></td>
+                        <td>
+                            <span id="Banner1_siteName" class="SiteTitle">Erciyes Öğrenci Bilgi Sistemi </span></td>
+                    </tr>
+                </table>
+            </td>
+            <td align="right" valign="middle" width="50%">
+                
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <table id="Banner1_tabs" class="OtherTabsAp" cellspacing="0" border="0" style="border-collapse:collapse;">
+	<tr>
+		<td class="SelectedTab" style="border-width:1pt;border-style:solid;height:25px;">
+                        &nbsp;
+                        <a id="Banner1_tabs_ctl00_HyperLink1" class="SelectedTab" href="obisis.html" style="background-color:White;">Ana Sayfa</a>                        
+                        &nbsp;
+                    </td><td style="border-width:1pt;border-style:solid;height:25px;">
+                        &nbsp;
+                        <a id="Banner1_tabs_ctl01_HyperLink1" class="OtherTabs" href="Default.aspx?tabInd=1&amp;tabNo=14">Dosyalar</a>                        
+                        &nbsp;
+                    </td><td style="border-width:1pt;border-style:solid;height:25px;">
+                        &nbsp;
+                        <a id="Banner1_tabs_ctl02_HyperLink1" class="OtherTabs" href="benimcv.html">Hakkımda</a>                        
+                        &nbsp;
+                    </td>
+	</tr>
+</table></td>
+        </tr>
+    </tbody>
+</table>
+
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                        <br />
+                        <table cellspacing="0" cellpadding="4" width="100%" border="0">
+                            <tbody>
+                                <tr valign="top">
+                                    <td id="LeftPan">
+                                    
+<style type="text/css">
+  
+    .rcLabelClass {
+    position: relative;
+   
+    
+    color:black;
+    width:120px;
+     font-size: 12px;
+}
+    .rcTextBoxClass {
+    position: relative;
+    width: 120px;
+    background-color:#e6e6e6;
+    margin-top:20px;
+        
+}
+.rcCaptchaAudioLink {
+    display: block;
+    position: absolute;
+  
+    height: 40px;
+    width: 120px;
+    background: url('https://obisis.erciyes.edu.tr/images/audioButton.png') no-repeat;
+    font-size: 11px;
+    line-height: 22px;
+    text-decoration: none;
+    padding-left: 28px;
+    padding-top:1px;
+    color:red;
+    
+}
+.rcRefreshImage {
+    display:block;
+    position:absolute;
+    left:125px;
+    height: 24px;
+    width: 60px;
+    margin-top:-25px;
+    background: url('https://obisis.erciyes.edu.tr/images/reloadButton.png') no-repeat;
+   
+    text-decoration:none;
+
+
+    
+}
+
+</style>
+<table cellspacing="0" cellpadding="0" border="0">
+    <tbody>
+        <tr>
+            <td >
+                <img id="ctl02_Image1" src="https://obisis.erciyes.edu.tr/images/obisis.jpg" style="border-width:0px;" />
+                <span class="NormalBold">Sisteme giriş için<br /> Öğrenci No ve Şifrenizi<br /> yazıp Giriş'e tıklayınız.</span>
+                <hr width="100%" noshade="noshade" size="1" />
+                <span class="Normal">Öğrenci No:</span>
+                <br />
+                <input name="ctl02$txtboxOgrenciNo" type="text" maxlength="10" id="ctl02_txtboxOgrenciNo" class="NormalTextBox" style="width:120px;" />
+                <br />
+                <span class="Normal">Şifre:</span>
+                <br />
+                <input name="ctl02$txtBoxSifre" type="password" maxlength="30" id="ctl02_txtBoxSifre" class="NormalTextBox" style="width:120px;" />      
+            </td>
+        </tr>
+        <tr>
+            <td>
+              
+            
+               <br />
+                <div id="ctl02_RadCaptcha1" class="RadCaptcha RadCaptcha_Default" style="width:132px;">
+	<!-- 2020.3.915.40 --><span id="ctl02_RadCaptcha1_ctl00" style="color:Red;display:none;"></span><div id="ctl02_RadCaptcha1_SpamProtectorPanel">
+		<div id="ctl02_RadCaptcha1_ctl01">
+			<img id="ctl02_RadCaptcha1_CaptchaImageUP" alt="" src="Telerik.Web.UI.WebResource.jpg" style="height:32px;width:120px;border-width:0px;display:block;" /><a id="ctl02_RadCaptcha1_CaptchaLinkButton" class="rcRefreshImage" title="" href="javascript:__doPostBack(&#39;ctl02$RadCaptcha1$CaptchaLinkButton&#39;,&#39;&#39;)" style="display:block;"></a><a href="https://obisis.erciyes.edu.tr/Telerik.Web.UI.WebResource.axd?type=cah&amp;isc=true&amp;guid=3770270e-d45b-4643-86a2-8522a8ce7d2c" id="ctl02_RadCaptcha1_CaptchaAudioCodeUP" title="  Kodu Dinleyiniz" class="rcCaptchaAudioLink" style="display:block;">  Kodu Dinleyiniz</a>
+		</div><p><input name="ctl02$RadCaptcha1$CaptchaTextBox" type="text" maxlength="5" id="ctl02_RadCaptcha1_CaptchaTextBox" class="rcTextBoxClass" /><label for="ctl02_RadCaptcha1_CaptchaTextBox" id="ctl02_RadCaptcha1_CaptchaTextBoxLabel" class="rcLabelClass">Gösterilen Kodu Yazınız</label></p>
+	</div><input id="ctl02_RadCaptcha1_ClientState" name="ctl02_RadCaptcha1_ClientState" type="hidden" />
+</div>
+                 
+
+            </td>
+        </tr>
+        <tr>
+            <td >
+                <br />
+                <br />
+                <input type="submit" name="ctl02$btnLogin" value="Giriş" onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl02$btnLogin&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" id="ctl02_btnLogin" class="NormalBold" style="width:120px;" />                  
+            </td>
+        </tr>
+        <tr>
+            <td >
+                &nbsp;
+            </td>
+        </tr>        
+        <tr>
+            <td >
+
+                <a id="ctl02_lbtnDontKnowPassword" class="CommandButton2" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl02$lbtnDontKnowPassword&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, true))">Şifremi Bilmiyorum</a>
+            </td>
+        </tr>
+        <tr>
+            <td >
+                &nbsp;
+            </td>
+        </tr>       
+        <tr>
+            <td align="center" >
+                
+            </td>
+        </tr>
+        <tr>
+            <td >
+                &nbsp;
+            </td>
+        </tr>   
+        <tr>
+            <td >
+                <span id="ctl02_lblLoginMessage" class="NormalRed"></span>
+            </td>
+        </tr>     
+          
+        <tr>
+            <td ></td>
+        </tr>     
+          
+        <tr>
+            <td align="center" >
+                <a href="http://engelsiz.erciyes.edu.tr" target=_blank><img id="ctl02_imgEngelsizERU" src="http://engelsiz.erciyes.edu.tr/images/engelsiz.png" style="border-width:0px;" /></a>
+            </td>
+        </tr>     
+          
+    </tbody>
+</table>
+<br />
+</td>
+
+                                    <td id="CenterPan">
+                                    
+
+<script type="text/javascript">
+    function CallPrint(strid, strid2)
+    {
+        var prtContent2 = document.getElementById(strid2);
+        if (prtContent2) 
+        {   
+            prtContent2.style.display = 'none';
+        }
+        var prtContent = document.getElementById(strid);        
+        var WinPrint = window.open('', '', 'left=0,top=0,width=1,height=1,toolbar=0,scrollbars=0,status=0');
+        WinPrint.document.writeln(prtContent.innerHTML);        
+        //WinPrint.document.close();
+        WinPrint.focus();
+        WinPrint.print();
+        //WinPrint.close();
+        //prtContent.innerHTML = strOldOne;
+    }    
+</script>
+<table cellspacing="0" cellpadding="0" width="100%">
+	<tbody>
+		<tr>
+		    <td width="40">
+		        <img id="ctl03_uscDuyuruTitle_imgLogo" src="https://obisis.erciyes.edu.tr/images/news.gif" style="border-width:0px;" />
+		    </td>
+			<td align="left" valign="middle">
+				<span id="ctl03_uscDuyuruTitle_lblTitle" class="Head">Duyurular</span>
+			</td>
+			<td align="right" valign ="bottom" >
+				<a id="ctl03_uscDuyuruTitle_btnEdit" class="CommandButton"></a>
+			</td>
+            <td align="right" valign="bottom">
+                
+                &nbsp;
+            </td>
+		</tr>
+		<tr>
+			<td colspan="4">
+				<hr/>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<table id="ctl03_dlDuyuru" cellspacing="0" cellpadding="4" border="0" style="width:98%;border-collapse:collapse;">
+	<tr>
+		<td>
+        
+        <span class="NormalBlue">
+            <font color=red>ERÜ Öğrenci Konseyi 2016-2018 Dönemi Seçim Sonuçları</font>
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">ERÜ Öğrenci Konseyi 2020-2022 Dönemi Seçim Sonuçlarına aşağıdaki link aracılığı ile erişilebilir. <br/><br/>
+
+<strong>1. Tur Seçim Sonuçları için  </strong> <a href='https://obisis.erciyes.edu.tr/Files/Secim_Sonuc_2020_2020_Tur1.pdf' 
+title="1. Tur Seçim Sonuçları ">TIKLAYINIZ !</a> <br/><br/>
+
+<strong>2. Tur Seçim Sonuçları için  </strong> <a href='https://obisis.erciyes.edu.tr/Files/Secim_Sonuc_2020_2020_Tur2.pdf' 
+title="1. Tur Seçim Sonuçları ">TIKLAYINIZ !</a> <br/><br/>
+
+
+Öğrenci Konseyi Seçim Esasları'nin 11 ve 12. maddeleri aşağıdaki gibidir: <br/><br/>
+
+11. Bölüm/Program Öğrenci Temsilcileri <strong>Üniversite Seçim Kurulunun gözetiminde zoom platformu üzerinden 25 Kasım 2020 Çarşamba 17:00’ye kadar</strong> birim öğrenci temsilcisini seçer (tek bölümlü birimlerde seçilen aday birim öğrenci temsilcisi olarak görev yapar) ve sonuçlar aynı gün Rektörlüğe bildirilir.<br/><br/>
+12. Öğrenci Konseyi Genel Kurulu, Rektör veya Rektör Yardımcısı tarafından <strong>27 Kasım 2020 Cuma günü saat 14:00'de zoom platformu zerinden toplantıya çağırılır </strong> ve bu toplantıda Öğrenci Konseyi organları seçilir.
+
+
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            <font color=red>Öğrenci Konseyi Seçimine İlişkin Kullanım Kılavuzu</font>
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">Öğrencilerimizin 2020-2022 Dönemi Öğrenci Konseyi Seçimlerinde nasıl oy kullanacaklarını anlatan  bir kullanım kılavuzu hazırlanmıştır.  <br/><br/>
+
+<strong>Kullanım Kılavuzu için  </strong> <a href='https://obisis.erciyes.edu.tr/Files/OBISIS_OY_KULLANMA_KILAVUZU_YENI.docx' title="Kullanım Kılavuzu">TIKLAYINIZ !</a> <br/><br/><br/>
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            TÜBİTAK Star Programı Başladı
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal"><a href='https://obisis2.erciyes.edu.tr/files/tubitak1.jpg'
+ target=_blank><img src='https://obisis.erciyes.edu.tr/files/tubitak1.jpg'></img></a>
+</br> <br/> <br/> 
+<b>
+TÜBİTAK Star Programı İle hem tecrübe kazanın hem de mevcut TÜBİTAK projelerinde bursiyer olun.<br/> 
+
+Başvuru için: <a href=http://star.tubitak.gov.tr/
+target=_blank>http://star.tubitak.gov.tr/</a> <br/> 
+
+Son başvuru tarihi: 30.11.2020
+
+</b>
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            Benim İşim Girişim Yarışması
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal"><a href='https://obisis2.erciyes.edu.tr/files/girisim1.jpg'
+ target=_blank><img src='https://obisis.erciyes.edu.tr/files/girisim1.jpg'></img></a>
+</br> <br/> <br/> 
+<b>
+Benim İşim Girişim Yarışması IV.Dönem Başvuruları Başladı !<br/>
+Projenizi Hayata Geçirmek için siz de başvurun.<br/>
+Başvuru için <a href=http://www.benimisimgirisim.com/
+target=_blank>http://www.benimisimgirisim.com/</a>
+<br/>
+Son başvuru tarihi: 14 Aralık 2020<br/>
+</b>
+
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            İçindeki Girişimciyi Fark Et Etkinliği
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal"><a href='https://obisis2.erciyes.edu.tr/files/girisim.jpg'
+ target=_blank><img src='https://obisis.erciyes.edu.tr/files/girisim.jpg'></img></a>
+</br> <br/> <br/> 
+<b>
+İçindeki Girişimciyi Fark Et
+Global Girişimcilik Haftası dolayısıyla düzenlediğimiz “Başarı Hikayeleri Paneline“ davetlisiniz.<br/>
+<br/>
+Konuşmacılar<br/>
+Çağla GÜL ŞENKARDEŞ | MenaPay CO Founder & CEO<br/>
+İsa UYSAL | CepteTamir Founder<br/>
+Buse BERBER ÖRÇEN | Nanomik CO Founder & CEO<br/><br/>
+
+
+
+
+Tarih: 20 Kasım 2020, Cuma</br>
+Saat: 15.00</br>
+Kayıt linki: https://www.kisa.link/O851</br></b>
+
+
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            <font color=red>2020-2022 DÖNEMİ ÖĞRENCİ KONSEYİ SEÇİMİ</font>
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">Erciyes Üniversitesi Yönetim Kurulunun görevlendirdiği ERÜ Üniversite Seçim Kurulu ekte sunulan <b> “Öğrenci Konseyi Seçim Esasları</b>”na göre aday listesi açıklanmıştır. <br/><br/>
+
+
+<strong>ÖĞRENCİ KONSEYİ SEÇİMİ ADAY LİSTESİ için</strong> <a href='https://www.erciyes.edu.tr/Content/FileManager/Files/Formlar/TUTANAK1.pdf' title="Öğrenci Konseyi Seçimi Aday Listesi ">TIKLAYINIZ !</a> <br/><br/><br/>
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            Fikri Haklar Bilgilendirme Seminerine Davetlisiniz
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal"><a href='https://obisis.erciyes.edu.tr/files/fhaklar.jpg'
+ target=_blank><img src='https://obisis.erciyes.edu.tr/files/fhaklar.jpg'></img></a>
+</br> <br/> <br/> 
+
+<b>
+Tarih: 13 Kasım 2020, Cuma</br>
+Saat: 14.00-15.30</br>
+Eğitmen: Mesut AKTEKİN | ETTO Fikri Haklar Birimi Koordinatörü </br>
+Kayıt linki: https://www.kisa.link/O7kX</br></b>
+
+
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            <font color=red>2020-2022 DÖNEMİ ÖĞRENCİ KONSEYİ SEÇİMİ</font>
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">Erciyes Üniversitesi Yönetim Kurulunun görevlendirdiği ERÜ Üniversite Seçim Kurulu ekte sunulan <b> “Öğrenci Konseyi Seçim Esasları</b>”na oy birliği ile karar vermiştir. <br/><br/>
+
+<strong>Öğrenci Konseyi Seçim Esasları Tam Metni İçin</strong> <a href='https://www.erciyes.edu.tr/Content/FileManager/Files/Formlar/01konsey.pdf' title="Öğrenci Konseyi Seçim Esasları">TIKLAYINIZ !</a> <br/><br/><br/>
+
+<b>ÖBİSİS üzerinden adaylık başvurusunun alınması:</b> 
+<br/><br/>
+
+<b>1-) 05.11.2020 Perşembe saat 15:00 </b>'dan itibaren Öbisis üzerinden adaylık başvurusu yapılabilecektir. <br/><br/>
+
+<b>2-)</b> Öbisis adaylık başvuru şartlarından ortalama, bu dönem ders seçmiş aktif bir öğrenci olma,disiplin cezası ile  uzaklaştırma, normal öğrenim süresini aşmış olma, kayıt dondurma kontrollerini yaparak şartlar uygun ise adaylık başvurusunu alacaktır.<br/><br/>
+
+<b>3-)</b> Öğrencilerimizin Siyasi Parti üyeliği ve  Herhangi Bir Terör Örgütü ile İlgisi olmadığına dair öğrencilerimiz beyanı alınacaktır.  "Bir siyasi partiye üye olmadığını ve/veya görevi olmadığını" ve "Bir Terör Örgütü ile İlgisi Olmadığını" ÖBİSİS üzerinden beyan edecek, bu beyanın yanlış olduğunun tespiti durumunda adaylığı ve seçilmiş ise temsilciği düşecektir. <br/><br/>
+
+<b>4-)</b> Aday öğrencilerimizin, <b>Adli Sicil Kayıt Belgelerini</b>  e-devlet üzerinden veya adliyeden alıp ve <b> 13.11.2020 Cuma günü saat 17:00</b>'a kadar belgenin pdf kopyasını  <b>ogrencikonseyisecimi@erciyes.edu.tr </b> mail adresine mail ile göndermeleri gerekmektedir . <br/><br/>
+
+<b>5-)</b> Adli sicil kaydı olmayan ve belgesini mail ile gönderip teslim etmiş ve başvurusunu yapmış aday öğrencilerimiz,  adaylıkları  <b>Üniversite Seçim Kurulu</b>'nun onayı ile kesinleşecek ve <b>16.11.2020 Pazartesi </b> günü ÖBİSİS üzerinden ilan edilecektir.<br/><br/>
+
+<b>6-)</b> Aday öğrencilerimiz ÖBİSİS üzerinden html formatında <b>Seçim Bildirgelerini</b> girebilecekler ve bu seçim bildirgeleri oy kullanacak tüm öğrenciler tarafından görülecektir. <br/><br/>
+
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            YETENEK KAPISI
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal"><B>
+Değerli Öğrencilerimiz, </BR></B>
+Eğitiminizin yanında kariyer gelişiminize destek vermek ve farklı kariyer imkânlarına
+erişiminizi kolaylaştırmayı önemsiyoruz.
+Bu doğrultuda üniversite kariyer merkezimiz iş/staj ilanları ve kariyer etkinliklerinden haberdar
+olup kolayca başvurabileceğiniz ve </BR>
+profesyonel kariyer danışmanlığı alabileceğiniz çevrimiçi
+platform olan<B>
+ “Yetenek Kapısı”nı</B>
+ hizmetinize sunmuştur.</BR>
+Öğrenciliğiniz ve hatta mezun olduktan sonra da sizlere sunduğumuz kariyer fırsatlarından
+faydalanabilmeniz için <a href=https://www.yetenekkapisi.org/login
+target=_blank>https://www.yetenekkapisi.org/login</a>
+
+adresi üzerinden sisteme dâhil
+olmanızı öneriyoruz.</BR>
+
+Yetenek Kapısı ile ilgili detaylı bilgi almak için ekteki dokümanları inceleyebilir ve Kariyer
+Merkezini ziyaret edebilirsiniz.</BR>
+
+İlanlar, etkinlikler ve duyurulardan en önce haberdar olmak için Yetenek Kapısını düzenli
+olarak ziyaret etmenizi önerir, ihtiyacınız olduğu her zaman Kariyer Merkezimizden destek
+alabileceğinizi hatırlatmak isteriz.</BR></BR>
+
+<B>
+
+Sevgi ve saygılarımızla.</BR></BR>
+
+
+Erciyes Üniversitesi Kariyer Yönlendirme ve Bilgilendirme Merkezi Müdürlüğü
+</B>
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            2247 - C Stajyer Araştırmacı Burs Programı (STAR) Başlıyor
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">
+2247-C Stajyer Araştırmacı Burs Programı  kapsamında <B>TÜBİTAK Merkez ve  Enstitülerinde yürütülen veya TÜBİTAK  tarafından desteklenen bir araştırma  projesinde görev alacak lisans öğrencileri </B> aylık burs ile desteklenecek.</BR></BR>
+STAR programına başvurmak isteyen lisans öğrencilerinin öncelikle TÜBİTAK Merkez ve Enstitülerinde yürütülen veya TÜBİTAK tarafından desteklenen bir araştırma projesinden kabul alması gerekmektedir. </BR>Bir projeden kabul alan öğrenciler Başvuru Belgeleri sekmesinde yer alan "TÜBİTAK Merkez ve Enstitülerinde yürütülen veya TÜBİTAK tarafından desteklenen bir araştırma projesinde görev alacağını gösterir belgeyi” proje yürütücüsüne imzalatmalıdır. </BR>
+Programa başvurmak isteyen lisans  öğrencileri TÜBİTAK Merkez ve  Enstitülerinde yürütülen veya TÜBİTAK  tarafından desteklenen araştırma  projelerine <a href=http://star.tubitak.gov.tr
+target=_blank>http://star.tubitak.gov.tr
+</a>
+adresinden  ulaşabilecek. </BR> Projesine STAR aracılığıyla  lisans öğrencisi alımı yapmak isteyen  proje yürütücüleri projelerinin portalda  yer alması için <font color=blue>
+star@tubitak.gov.tr </font>
+adresine mail atabilirler.</BR>
+Bu projeye kabul edilen lisans öğrencileri bursiyer olarak görev alırken, 6 ay boyunca aylık 750 TL burs almaktadırlar.</BR>
+<B>Çağrı Takvimi : 2 Kasım 2020 – 30 Kasım 2020</B>
+
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            BIGG ERCİYES TÜBİTAK 1512 (TEKNOGİRİŞİM SERMAYESİ) PROGRAMI BAŞLADI!
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal"><B>
+Değerli Girişimciler, </BR></B>
+
+BiGG Programı 1. Aşama süreçlerini yürütecek olan 31 uygulayıcı kuruluş arasında yer almayı başaran Erciyes Teknopark’ın, BiGG Erciyes adını verdiği girişimcilere yönelik </BR> TÜBİTAK 1512 sermaye desteği programının başvuruları başladı.</BR></BR>
+BİGG Erciyes programı, başvuruların alınıp incelenmesi, TÜBİTAK’a iletilmesi, programa dahil olacak girişimcilerin jüri tarafından seçilmesi, seçilen girişimcilerin konu ile ilgili eğitimler alması aşamalarını içermektedir. 
+</BR></BR>TÜBİTAK desteğini alan girişimcilerimiz Sera Kuluçka Merkezi’nde AfterSera ticarileşme programına dahil olarak iş fikirlerini hayata geçirirken iş süreçlerini hem hızlandırma hem de profesyonel destek alma fırsatı yakalamış olacaklar.</BR>
+BİGG Erciyes programına;</BR>
+*Lisans son sınıf öğrencileri </BR>
+*Lisans mezunları</BR>
+*Yüksek lisans öğrencileri/mezunları</BR>
+*Doktora öğrencileri /mezunları</BR>
+*Akademisyenler</BR>
+*Son mezuniyet tarihinden itibaren en fazla 10 yıl geçmiş olanlar başvuru yapabilirler.</BR></BR>
+
+<B>
+ İş Fikrinizin Gerçeğe Dönüşmesi İçin Siz de  <a href=https://www.biggerciyes1512.com /
+target=_blank>https://www.biggerciyes1512.com /
+</a>
+adersine  başvurun !</BR></BR></B>
+
+Yenilikçi iş fikirlerinin girişimcilere verilen eğitimler ile geliştirilerek teknolojik tabanlı ürünlere dönüşümünü kapsayan BiGG Erciyes programında, girişimcilere verilecek olan 200.000 TL tutarındaki hibe TÜBİTAK tarafından sağlanmakta olup tamamen TÜBİTAK’ın yetkisi dahilindedir. </BR>Erciyes Teknopark olarak tüm girişimci adaylarını <a href=https://www.biggerciyes1512.com /
+target=_blank>https://www.biggerciyes1512.com /
+</a>
+adresinden BiGG Erciyes programına başvurmaya davet ediyoruz.
+
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            TÜBİTAK, Lisans ve Yüksek Lisans Öğrencilerinin projelerini destekliyor
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">TÜBİTAK, Lisans ve Yüksek Lisans Öğrencilerinin projelerini destekliyor. Bu kapsamda, TÜBİTAK tarafından<b> “2209-B Sanayiye Yönelik Lisans Araştırma Projeleri Desteği”, “2210-B Sosyal Bilimlere Geçiş Yurt İçi Yüksek Lisans Bursu” </b>ve <b>“2210-D Yurt İçi Sanayiye Yönelik Yüksek Lisans Bursu”</b> çağrıları başvuruya açılmıştır. <br><br>
+
+<b>2209-B Sanayiye Yönelik Lisans Araştırma Projeleri Desteği Programı</b> ile üniversitelerde öğrenim görmekte olan lisans öğrencilerinin sanayinin bir sorununu çözmeye yönelik hazırladıkları projeye<b> 5.000 TL</b>’ye kadar destek vermektedir. Son başvuru tarihi<b> 13.11.2020</b>’dir. BİDEB 2209-B çağrı metni için 
+
+<a href='https://www.tubitak.gov.tr/sites/default/files/4000/2209b_cagri_duyurusu_07.09.2020.pdf'
+target=_blank>tıklayınız.</a>
+<br> <br>
+<b>2210-B Sosyal Bilimlere Geçiş Yurt İçi Yüksek Lisans Burs Programı</b> ile Doğa Bilimleri, Mühendislik ve Teknoloji Bilimleri, Tıbbi Bilimler ile Tarımsal Bilimlerde lisans eğitimi alan başarılı öğrencilerin sosyal ve beşeri bilimler alanında tezli yüksek lisans öğrenimi yapmalarını teşvik etmek amacıyla nitelikli kişilerin sosyal ve beşeri bilimler alanına geçiş yapmasına destek verilecektir. Son başvuru tarihi <b>27.11.2020</b>’dir. BİDEB 2210-B çağrı metni için
+<a href='https://www.tubitak.gov.tr/sites/default/files/3835/2210b-2020_cagri_metni_guncelleme_20.10.2020.pdf'
+target=_blank>tıklayınız.</a>
+<br> <br>
+
+<b>2210-D Yurt İçi Sanayiye Yönelik Yüksek Lisans Burs Programı </b>ile sanayinin ihtiyaç duyduğu alanlara yönelik bilgi üretmek ve insan kaynağı yetiştirilmesine katkı sağlamak amacıyla Türkiye’de tezli yüksek lisans öğrenimi gören başarılı öğrencilere aylık <b>2.100 TL</b> burs desteği verilecektir. Son başvuru tarihi <b>27.11.2020</b>’dir. BİDEB 2210-D çağrı metni için 
+<a href='https://www.tubitak.gov.tr/sites/default/files/3835/2210d-2020_yili_cagri_metni-07-10-2020.pdf'
+target=_blank>tıklayınız.</a>
+<br> <br>
+
+Başvuru Sürecini Başlatmak İçin: <br>
+<a href='https://e-bideb.tubitak.gov.tr/giris.htm'
+target=_blank>https://e-bideb.tubitak.gov.tr/giris.htm</a>
+<br> <br>
+
+Program Hakkında Detaylı Bilgi İçin:<br>
+Erciyes Teknoloji Transfer Ofisi  <br>
+Proje Destek Hizmetleri Birimi (0352 207 66 66 - 68333 – 68348)<br>
+
+
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            ONLINE KARIYER VE KİŞİSEL GELİŞİM EĞİTİMİ
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">
+<b>
+Tarih 20-23  Ekim 2020  Saat : 09:30 - 17:30
+</br> </br>
+
+Yer : Online platformda düzenlenecektir.</br></br>
+
+Düzenleyen
+ERÜ - İŞKUR - Yetenek Kapısı</b></br></br>
+
+
+Detaylı Bilgi için : 
+
+
+</br> 
+<a href='https://www.erciyes.edu.tr/Etkinlik-Detayi/Online-Kariyer-ve-Kisisel-Gelisim-Egitimi/6013 '
+ target=_blank>https://www.erciyes.edu.tr/Etkinlik-Detayi/Online-Kariyer-ve-Kisisel-Gelisim-Egitimi/6013</a>
+
+</br> 
+<a href='https://www.erciyes.edu.tr/Etkinlik-Detayi/Online-Kariyer-ve-Kisisel-Gelisim-Egitimi/6014 '
+ target=_blank>https://www.erciyes.edu.tr/Etkinlik-Detayi/Online-Kariyer-ve-Kisisel-Gelisim-Egitimi/6014</a>
+
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            DERS KAYDI YAPACAK ÖĞRENCİLERİMİZİN DİKKATİNE
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal"><strong><font color=red><a href='http://obisis.erciyes.edu.tr' target=_blank>http://obisis.erciyes.edu.tr</a></font></strong> adresinden ders kaydı yaparken sıkıntı yaşanması durumunda alternatif olarak <a href='http://obisis2.erciyes.edu.tr' target=_blank><strong><font color=red>http://obisis2.erciyes.edu.tr</a></font></strong> adresinden ders kaydı yapılabilir.
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            DERS KAYDI YAPILMASI İÇİN EK SÜRE VERİLMESİ
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">2020-2021 Eğitim-Öğretim Yılı Güz Yarıyılında oluşan yoğunluktan dolayı ders kaydını yapamayan öğrencilerimize Ders Ekle/Sil dahil ders kayıtlarını yapabilmeleri için 09/10/2020 Cuma günü saat:23:59'a kadar ek süre verilmiştir. 
+</BR>
+</BR>
+
+
+İlgili öğrencilerimize önemle duyurulur. </BR>
+ </BR>
+
+
+Öğrenci İşleri Daire Başkanlığı
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            DERS KAYITLARINDA ERTELEME
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">Ders kayıtları 28.09.2020 tarihinde başlayacağı duyurulan 2. , 3. ve 4. gruplar ile Serbest Seçmeli Dersler kayıtları ertelenmiştir. <br/>
+
+<b>2.Grup 29.09.2020 09:00 ‘da Başlayacak</b>
+<br/>
+İktisadi Ve İdari Bilimler Fakültesi, Edebiyat Fakültesi,Sağlık Bilimleri Fakültesi, Mimarlık Fakültesi ,Veteriner Fakültesi,Turizm Fakültesi,Turizm  İşletmeciliği ve Otelcilik Y.O.
+
+
+<br/><br/>
+
+
+<b>3.Grup 30.09.2020 09:00 ‘de Başlayacak</b>
+<br/>
+Fen Fakültesi, İletişim Fakültesi, Eğitim Fakültesi, Güzel Sanatlar Fakültesi, Halil Bayraktar Sağlık Hizmetleri M.Y.O.,  <br/>
+Sivil Havacılık Yüksekokulu, Havacılık ve Uzay Bilimleri Fakültesi,  Adalet Meslek Yüksekokulu,Diş Hekimliği Fakültesi,İlahiyat Fakültesi
+
+
+<br/><br/>
+
+
+<b>4.Grup 01.10.2020 09:00 ‘da Başlayacak</b>
+<br/>
+Fen Bilimleri Enstitüsü, Sağlık Bilimleri Enstitüsü, Sosyal Bilimler Enstitüsü, Güzel Sanatlar Enstitüsü, Eğitim Bilimleri Enstitüsü,Gevher Nesibe Genom ve Kök Hücre Enstitüsü
+<br/>
+<br/>
+
+<b><font color=red>"Tüm grupların aynı anda serbest seçmeli dersleri seçebilmeleri için, Serbest seçmeli derslerin seçimi 01.10.2020 saat 10:00 da başlatılacaktır; Serbest Seçmeli ders alacak olan öğrenciler ders kaydını Serbest Seçmeli dersini de seçtikten sonra Danışman onayına gönderecektir.
+</font></b>
+
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            HARÇ ÖDEME TAHSİLATI BAŞLAMIŞTIR. 
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">Erciyes Üniversitesi için Halkbank aracılığı ile internet harç tahsilatımız başlamıştır. Ödemelerinizi Halkbank Şubelerine giderek veya Halkbank İnternet Bankacılığını kullanarak veya Halkbank ATM'lerini kullanarak yapabilirsiniz. ( Ödeme menüsü altında, Eğitim Ödemeleri altından Erciyes Üniversitesini seçip T.C.Kimlik numaranızı girerek ) </br></br>
+
+Harç borcu olan öğrencilerimiz borcunu ödemeden ders kaydı yapamazlar. Üniversitemize yeni kayıt olan öğrencilerimizin de varsa önce harç borcunu ödemeleri gerekmektedir. Ders kayıtları aşağıdaki ilanda belirtildiği üzere okul okul belirtilen saatlerde açılacaktır.</br></br>
+
+Yeni kayıt olan öğrencilerimiz, nasıl ders kaydı yapacaklarını öğrenebilecekleri kullanım kılavuzu için <a href='https://obisis2.erciyes.edu.tr/Files/obisis_yardim.pdf'
+target=_blank>bu linke tıklayabilirler.</a>
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            2020-2021 GÜZ DÖNEMİ DERS KAYITLARI
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal"><br/> <b><font color=red>
+2020-2021 Güz Dönemi Ders Kayıtlarında önce Katkı Payı / Öğrenim Ücreti (Harç) Ödemesi gereken öğrencilerimiz ödemelerini yapacaklar sonra ders kaydı yapacaklardır.</b> </font>
+<br/> <br/>
+
+<font color=blue>
+TURİZM FAKÜLTESİ , TURİZM İŞLETMECİLİĞİ ve OTELCİLİK Y.O. 
+</font> <br/> 
+DERS KAYIT  : 28.09.2020 - 04.10.2020   <br/> 
+EKLE ve  SİL : 05.10.2020 -11.10.2020<br/> <br/> 
+
+
+<font color=red>
+VETERİNER FAKÜLTESİ   <br/>
+</FONT>
+DERS KAYIT : 28.09.2020 - 05.10.2020   <br/> 
+EKLE ve SİL : 07.10.2020 -09.10.2020 <br/> <br/>
+
+
+<font color=BLUE>
+DİĞER OKULLAR <br/>
+</FONT>
+DERS KAYIT : 28.09.2020 - 06.10.2020   <br/> 
+EKLE ve SİL : 07.10.2020 -09.10.2020 <br/> <br/>
+<b>
+
+Diğer okullarımız için ders kayıtları  28.09.2020 tarihinde başlayacak ve 06.10.2020 tarihinde bitecektir. Bu öğretim yılında mazeret kayıtları olmayacaktır. Sadece ders kayıt haftasında kaydını yapan öğrenciler için,
+<br/>
+ 07.10.2020 ve 09.10.2020 tarihleri arasında ders silme/ekleme işlemi yapılabilecektir. 
+</b><br/><br/>
+
+Ders kayıtları, sisteme getireceği aşırı yük nedeniyle 4 gruba ayrılarak  farklı saatlerde açılacaktır. *
+<br/> <br/> 
+
+<b>1.Grup 28.09.2020 09:00 ‘da Başlayacak</b>
+<br/>
+Mühendislik Fakültesi, Spor Bilimleri Fakültesi, Hukuk Fakültesi, Seyrani Ziraat Fakültesi,Eczacılık Fakültesi,Tıp Fakültesi (Dönem VI öğrencileri hariç)
+
+<br/>
+<br/>
+<b>2.Grup 29.09.2020 09:00 ‘da Başlayacak</b>
+<br/>
+İktisadi Ve İdari Bilimler Fakültesi, Edebiyat Fakültesi,Sağlık Bilimleri Fakültesi, Mimarlık Fakültesi ,Veteriner Fakültesi,Turizm Fakültesi,Turizm  İşletmeciliği ve Otelcilik Y.O.
+
+
+<br/><br/>
+
+
+<b>3.Grup 30.09.2020 09:00 ‘de Başlayacak</b>
+<br/>
+Fen Fakültesi, İletişim Fakültesi, Eğitim Fakültesi, Güzel Sanatlar Fakültesi, Halil Bayraktar Sağlık Hizmetleri M.Y.O.,  <br/>
+Sivil Havacılık Yüksekokulu, Havacılık ve Uzay Bilimleri Fakültesi,  Adalet Meslek Yüksekokulu,Diş Hekimliği Fakültesi,İlahiyat Fakültesi
+
+
+<br/><br/>
+
+
+<b>4.Grup 01.10.2020 09:00 ‘da Başlayacak</b>
+<br/>
+Fen Bilimleri Enstitüsü, Sağlık Bilimleri Enstitüsü, Sosyal Bilimler Enstitüsü, Güzel Sanatlar Enstitüsü, Eğitim Bilimleri Enstitüsü,Gevher Nesibe Genom ve Kök Hücre Enstitüsü
+<br/>
+<br/>
+
+
+<b><font color=red>"Tüm grupların aynı anda serbest seçmeli dersleri seçebilmeleri için, Serbest seçmeli derslerin seçimi 01.10.2020 saat 10:00 da başlatılacaktır; Serbest Seçmeli ders alacak olan öğrenciler ders kaydını Serbest Seçmeli dersini de seçtikten sonra Danışman onayına gönderecektir.
+</font></b>
+
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            YKS ile Üniversitemize Yerleşen Adayların Kayıt İşlemleri
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">
+Öğrenci kayıt kılavuzu için 
+<a href='https://www.erciyes.edu.tr/Content/FileManager/Files/Formlar/edevlet.pdf'
+ target=_blank>tıklayınız.<a>
+</br>
+
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            REKTÖRLÜK GÜZEL SANATLAR BÖLÜMÜ
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">Öğrencilerimizin Rektörlük Güzel Sanatlar Bölümünün serbest seçmeli derslerini seçtiklerinde çakışma ve problem yaşamamaları için  ;</br> ders programı, sınav tarihleri, öğretim elemanları, derslikler ve ders içerikleri hakkında bilgi edinmeleri gerekmektedir.
+
+<a href='http://gsb.erciyes.edu.tr/'
+target=_blank>http://gsb.erciyes.edu.tr/ </a>
+linkini tıklayabilirsiniz.
+
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            TIP FAKÜLTESİ DÖNEM 6 ÖĞRENCİLERİNİN DİKKATİNE !
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">Yükseköğretim Kurumlarında Cari Hizmet Maliyetlerine Öğrenci Katkısı Olarak alınacak Katkı Payları ve Öğrenim Ücretlerinin değişmesinden dolayı bazı öğrencilerimizin harç borcu oluşmuştur. Harç borcu oluşan öğrencilerin <b>31.08.2020 tarihine kadar </b>borçlarını yatırmaları gerekmektedir. Aksi durumda ders kaydı iptal edilecek ve öğrencilik hakkı düşürülecektir. !
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            YAZ OKULU DERS KAYITLARININ AÇILMASI
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">ÖBİSİS alt yapısında oluşan bir teknik sıkıntı giderildiği için 20.07.2020 Pazartesi saat 18:00 itibari ile yaz okulu kayıtları açılmıştır.  </br>
+
+<a href='https://obisis2.erciyes.edu.tr/files/yazokulukılavuz.pdf'
+ target=_blank>Başvuru yardım kılavuzu için Tıklayınız...<a>
+</br>
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            FULBRIGHT BURS PROGRAMLARI 
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal"><a href='https://obisis.erciyes.edu.tr/files/fullb.jpg'
+ target=_blank><img src='https://obisis.erciyes.edu.tr/files/fullb.jpg'></img></a>
+</br> <br/> <br/> 
+
+Detaylı Bilgi için:
+<a href='https://fulbright.org.tr/burs/6/Fulbright-Doktora-Sonras%C4%B1-Ara%C5%9Ft%C4%B1rma-Bursu'
+ target=_blank>https://fulbright.org.tr/burs/6/Fulbright-Doktora-Sonras%C4%B1-Ara%C5%9Ft%C4%B1rma-Bursu</img></a>
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            TEK DERS SINAVI
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal"><a href='https://obisis2.erciyes.edu.tr/files/TEKDERS.pdf'
+ target=_blank>TEK DERS SINAV DUYURUSU İÇİN TIKLAYINIZ...<a>
+</br>
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            Sağlık Bilimleri Fakültesi Öğrenci Memnuniyet Anketi
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">Üniversitemizin çok değerli öğrencisi,<BR>
+Bu anket, Erciyes Üniversitesi Sağlık Bilimleri Fakültesi Bölümü öğrencileri için hazırlanmıştır. 
+<BR>
+
+Sağlık Bilimleri Fakültesi Öğrenci Memnuniyet Anketi: 
+<a href='http://ankets.erciyes.edu.tr/index.php/565242?lang=tr' target=_blank>Ankete katılmak için tıklayınız...</a> <BR><BR>
+
+
+
+Katılımınız için çok teşekkürler. <BR> <BR>
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            Öğrencilerimizin Dikkatine!
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal"><b>Üniversitemizin veritabanı sunucusunun taşınma işlemi gerçekleşeceğinden 10.07.2020  Cuma günü saat 22:00 ile 11.07.2020 Cumartesi günü Saat  23:59 arasında OBISIS'e erişimde zaman zaman kesinti yaşanabilir.</b>
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            Uzaktan Öğretim Sınav Süreci Hakkında Duyuru
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal"><b>
+30 Nisan 2020 tarihinde Erciyes Üniversitesi Üst Yönetim Toplantısında Uzaktan Öğretim Süreciyle İlgili; </br></br></b>
+
+1.Uzaktan Öğretim yoluyla yürütülen derslerin arasınavlarının ödevlendirme şeklinde yapılması ve değerlendirilmesi,</br></br>
+
+2.Pandemi durumuna göre final ve bütünleme sınavlarının online ya da yüzyüze şeklinde yapılmasına ilişkin kararın Mayıs ayı sonu itibariyle verilmesi, alınan karar çerçevesinde final ve bütünleme sınavlarının 6 Haziran-15 Temmuz 2020 tarihleri arasında yapılması,</br></br>
+
+
+3.Final ve Bütünleme sınavlarının tamamlanmasının ardından şartların uygun olması ve ilgili onayların alınması durumunda 15 Temmuz-15 Eylül tarihleri arasında yaz okulunun yüzyüze ya da online olarak açılabilmesi,</br></br>
+
+
+4.Tıp ve Diş Hekimliği Fakülteleri dışında diğer birimlerimizdeki uygulamalı derslerin de uzaktan öğretim yoluyla derslerin bitiş tarihi olan 5 Haziran 2020 tarihine kadar yapılması,</br></br>
+
+
+5.Uzaktan öğretim dersleri ve sınavları ile ilgili ayrıntılı açıklamaların ilgili birimlerimizin web sayfalarında yer alması ve güncel bir şekilde duyurulması,kararları alınmıştır.</br> </br>
+
+<b>
+Bu kararlar çerçevesinde 4 Mayıs-8 Mayıs 2020 tarihleri arasında uzaktan öğretim modülü <a href=https://erudm.erciyes.edu.tr/
+target=_blank>https://erudm.erciyes.edu.tr/</a>
+ portalı üzerinden arasınav ödevleri verilmiş olacak ve bu ödevlerin </br>
+31 Mayıs 2020 tarihine kadar teslimi yapılmış olacaktır. Arasınav notlandırma ağırlığı %30 olarak belirlenmiştir.</b>
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            Uygulamalı Derslerin ve Uzaktan Eğitim ile Verilen Teorik Derslerin sınavları hakkında Senato Kararı
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">Üniversitemiz Senatosu'nun 03/04/2020 tarihli ve 08 sayılı toplantısında; Yükseköğretim Kurulu Başkanlığının 27/03/2020 tarihli ve 24183 sayılı yazısı gereği uzaktan eğitime geçiş sürecinde 2019-2020 Eğitim-Öğretim Yılı Bahar yarıyılında birimlerden geldiği şekliyle teorik derslerin Üniversitemiz Bilgi İşlem Daire Başkanlığı Doküman Metaryali (ERUDM) portalı ve Üniversitemiz Uzaktan Eğitim Merkezi (ERUZEM) portalı üzerinden yapılması, uygulamalı derslerin ve uzaktan eğitim olarak verilen teorik derslere ait sınavların (ara sınav, yılsonu sınavı, bütünleme sınavı, tek ders sınavı) yaz döneminde belirlenecek akademik takvim çerçevesinde yüz yüze yapılmasına oy birliği ile karar verilmiştir.
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            TÜBİTAK 2209 A Üniversite Öğrencileri Araştırma Projeleri Destek Programı Açıldı!
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">Değerli Araştırmacılar;<br>
+TÜBİTAK 2209 Üniversite Öğrencileri Araştırma Projeleri Destekleme Programı kapsamında, “2209-A Üniversite Öğrencileri Araştırma Projeleri” çağrısı başvuruya açılmıştır.<br>
+Programda bazı yenilikler yapılmıştır;<br>
+Bu dönem COVID-19 salgını sebebiyle alınan tedbirler kapsamında, Bilim İnsanı Destek Programları Başkanlığı (BİDEB) tarafından yürütülen ve çağrıya yeni çıkan programda beyan esaslı başvuru sistemine geçilmiştir. Başvuru sisteminde talep edilen belgeleri sisteme yüklemek isteğe bağlı olacak şekilde düzenlenmiştir. Buna göre; araştırma proje önerisi formu dışında talep edilen tüm belgeler destek sonuçları ilan edildikten sonra desteği almaya hak kazananlardan talep edilecektir. Ayrıca programın bütçesinde iyileştirme yapılmıştır.<br><b>
+TÜBİTAK 2209 A projelerinin, destek üst limiti 4.000 TL’dir. Çağrının son başvuru tarihi 30.04.2020 ve süresi en fazla 12 aydır.</b> <br><br>
+
+Çağrı Metni:<br>
+
+<a href='https://www.tubitak.gov.tr/sites/default/files/4000/2209a_2020_cagri_duyurusu.pdf'
+ target=_blank>https://www.tubitak.gov.tr/sites/default/files/4000/2209a_2020_cagri_duyurusu.pdf</img></a>
+
+ <br><br>
+Sisteme yüklenecek olan Proje Önerisi Formu:  <br>
+
+<a href='https://www.tubitak.gov.tr/sites/default/files/4000/2209-a_arastirma_onerisi_formu.docx'
+ target=_blank>https://www.tubitak.gov.tr/sites/default/files/4000/2209-a_arastirma_onerisi_formu.docx</img></a>
+<br><br>
+Başvuru Yapmak İçin:  <br>
+
+<a href='https://e-bideb.tubitak.gov.tr/giris.htm'
+ target=_blank>https://e-bideb.tubitak.gov.tr/giris.htm</img></a>
+<br><br>
+Program Hakkında Detaylı Bilgi İçin:<br>
+Erciyes Teknoloji Transfer Ofisi <br>
+Proje Destek Hizmetleri Birimi (0352 207 66 66 - 68333 – 68348)
+
+
+
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            2019-2020 Eğitim - Öğretim Yılı Bahar Yarıyılı Kayıt Dondurma Hk. (COVID-19)
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">COVID-19 küresel salgınının bahar dönemi eğitimi başladıktan sonra ortaya çıkması yükseköğretim kurumlarındaki ders ekle-sil işlemlerinin sona ermesi, dönem sırasında bazı öğrencilerin uzaktan öğretime devam etme imkânlarının olmadığı da göz önünde bulundurularak, 31.03.2020 tarihli Yükseköğretim Yürütme Kurulu toplantısında COVID-19 küresel salgını dolayısıyla:<br><br>
+
+1. Yükseköğretim kurumlarında önlisans, lisans ve lisansüstü düzeyde kayıtlı olup öğrenim gören öğrencilerin, kayıtlı oldukları yükseköğretim kurumlarından talep etmeleri halinde 2019-2020 eğitim öğretim yılı bahar döneminde kayıtlarının dondurulmasına ve kayıt dondurulan sürenin azami süreden sayılmamasına,<br><br>
+2. Bununla birlikte lisansüstü eğitimde tez aşamasında olan öğrencilerin;
+<br>
+   a) Tezlerinin konu, nitelik ve mahiyetlerinin müsait olması, ayrıca tezlerine uzaktan öğretimle devam etme imkânı bulunması durumunda tez döneminde öğretimlerine devam edebilmeleri ile kayıt dondurma işleminden yararlanıp yararlanamayacağı hususlarında ilgili tez danışmanın görüşü alınması kaydıyla üniversite yönetim kurulunca değerlendirilerek karar verilmesine,
+<br>
+      b) Bu süreçte tez döneminde olup azami süresi biten öğrenciler için eğitime ara verilen süre kadar ilave süre verilmesine,
+<br>
+     c) Tez teslim, savunma ve yeterlik sınav tarihlerinin belirlenmesinde küresel salgının etki süreci ve öğrencinin şartlarının dikkate alınmasına, tez savunma ve yeterlik sınavlarının "denetlenebilir ortam ve şartlarda gerçekleştirilmesi ve muhakkak kayıt altına alınması şartıyla" dijital imkânlar ile yapılabileceğine, bununla birlikte bu konuda erteleme ve kayıt dondurma imkânından da yararlanılabileceğine,
+<br><br>
+3. Bu kararların 2019-2020 eğitim öğretim yılı Bahar dönemi ile sınırlı olmasına, karar verilmiştir.
+
+ <br><br>
+
+Bu doğrultuda 2019-2020 eğitim  - öğretim yılı Bahar yarıyılında ders kaydı yapmış ancak uzaktan öğretime devam etme imkânı bulunmadığı için derslere devam edemeyen Önlisans/Lisans/Lisansüstü düzeyde kayıtlı olan öğrencilerimiz 2019-2020 eğitim  - öğretim yılı Bahar yarıyılında kayıt dondurmak için başvurularını dilekçe ile 30 Nisan 2020 Perşembe günü mesai bitimine kadar ogridbsk@erciyes.edu.tr  elektronik posta adresine yapmaları gerekmektedir.<br><br>
+
+İlgili öğrencilerimize önemle duyurulur.
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            ÖĞRENCİLERİMİZİN DİKKATİNE !!!
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">Uzaktan öğretim süreçlerinde önlisans, lisans ve lisansüstü dersleri için kullanımı öngörülen  <a href=https://erudm.erciyes.edu.tr/
+target=_blank>https://erudm.erciyes.edu.tr/</a>
+portalı 30 Mart 2020 tarihi itibariyle kullanılmaya başlanacak olup, üniversitemiz tarafından sizlere verilen e-posta adresiniz ve şifrenizle sisteme giriş yapabileceksiniz. E-posta adresiniz ve şifrelerinizle ilgili problemlerinizin çözümü için erudm@erciyes.edu.tr adresine e-posta atabilirsiniz. <BR><BR>
+YÖK Başkanlığı'nın da ifade ettiği gibi bahar döneminin teorik dersleri uzaktan öğretim olarak dönem sonuna kadar verilmeye devam edecek, uygulamalı dersler ve sınavlar ise yaz döneminde yüzyüze olarak yapılacaktır. Süreçle ilgili üniversitemiz web sayfası, fakülteler ve ilgili bölüm başkanlıklarımızın web sayfalarında ayrıntılı bilgiler verilecek olup, bu duyuruların dikkatle takip edilmesi gerekmektedir.<BR><BR>
+Üniversitemizde ERUZEM üzerinden verilen ortak dersler (Atatürk İlkeleri ve İnkılap Tarihi, Türk Dili, Yabancı Dil dersleri) önceden olduğu gibi aynen ERUZEM  üzerinden senkron işlenmeye devam edecektir. <BR><BR>
+Yabancı Diller Yüksekokulu ve İlahiyat Fakültesi bünyesinde verilen hazırlık sınıfı dersleri ise 06 Nisan 2020 tarihi itibariyle ERUZEM üzerinden senkron (eşzamanlı) verilmeye başlanacaktır. Bu konudaki hazırlıkların tamamlanmasının ardından ERUZEM Müdürlüğü tarafından ayrıntılı bilgilendirme yapılacaktır. <BR><BR>
+Uzaktan öğretim portalı   <a href=https://erudm.erciyes.edu.tr/
+target=_blank>https://erudm.erciyes.edu.tr/</a> üzerindeki ders formatı asenkron (eşzamanlı olmayan) bir yapıda olup, ilgili derslerin materyallerine ulaşabilecek, öğretim elemanlarıyla etkileşimde bulunabilecek, sizlere verilecek ödev vb. gibi uygulamaları sisteme yükleyebileceksiniz. Devam zorunluluğunun aranmayacağı bu süreçte ders müfredatları haftalık olarak  takip edilecektir. Esnek bir platform imkanından dolayı sisteme o hafta içerisinde sizlerin uygun zamanınızda giriş yapma ve ders içeriklerini inceleyip aksiyon alma  imkanınız olacaktır. Derslerle ilgili ihtiyaç duymanız halinde bölüm/program başkanlıkları ile de iletişime geçebilirsiniz.<BR><BR>
+Uzaktan öğretim süreçleri üniversitelerimiz için bilindik olmakla birlikte derslerin tamamının bu platforma taşınması beraberinde bazı sıkıntıları da getirebilecektir. Bu sıkıntıları minimum düzeyde tutmak için tüm akademik ve idari personelimiz elinden gelen maksimum gayreti göstermektedir. Olası öngörülemeyen durumları da sabır ve anlayışla aşmış olacağız. <BR><BR>
+Verimli ve sağlıklı bir uzaktan öğretim süreci geçirmenizi temenni ediyor, başarılar diliyoruz.<BR><BR>
+<B>Rektörlük</B>
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            CORONA Virüsü 
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">ERÜ İş Sağlığı ve Güvenliği Uygulama ve Araştırma Merkezi'nin hazırlamış olduğu Corona Virüs ve alınması gereken önlemler konulu videoyu izlemek için aşağıdaki linke tıklayınız... </br></br>
+<a href='https://obisis.erciyes.edu.tr/files/Corona.mp4'
+ target=_blank>https://obisis.erciyes.edu.tr/files/Corona.mp4</img></a>
+</br>
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            GİRİŞİMCİLİK KAMPI BAŞLIYOR...
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal"><a href='https://obisis.erciyes.edu.tr/files/Afis4.jpg'
+ target=_blank><img src='https://obisis.erciyes.edu.tr/files/Afis4.jpg'></img></a>
+</br> <br/> <br/> 
+
+Detaylı Bilgi için :<a href=https://www.erciyes.edu.tr/Duyuru-Haber/University4Society-Girisimcilik-Kampi/14714/
+target=_blank>https://www.erciyes.edu.tr/Duyuru-Haber/University4Society-Girisimcilik-Kampi/14714/
+</a>
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            Sosyoloji ve İngiliz Dili Ed.Öğrenci Anketi
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">Üniversitemizin çok değerli öğrencisi,<BR>
+Bu anket, Erciyes Üniversitesi Sosyoloji ve İngiliz Dili Edebiyatı Bölümü öğrencileri için hazırlanmıştır. 
+<BR>
+
+Katılımınız için çok teşekkürler. <BR> <BR>
+
+
+<a href='http://ankets.erciyes.edu.tr/index.php/785681?lang=tr' target=_blank>Ankete katılmak için tıklayınız...</a><BR>
+
+<a href='http://ankets.erciyes.edu.tr/index.php/219522?lang=tr' target=_blank>Ankete katılmak için tıklayınız...</a>
+
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            DERS KAYDI VE KATKI PAYI ÜCRETİNİ YATIRMAK İÇİN EK SÜRE VERİLMESİ
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">Ders kayıt dönemi süresi içerisinde kayıt yaptırmayan / öğrenim ücreti - katkı payını yatıramayan öğrencilere Üniversitemiz Senatosunun  <B>
+13/02/2020 tarihli toplantısında 26 Şubat 2020 Çarşamba günü 1 (bir) gün  </B>
+ek süre verilmesi kararlaştırılmıştır. </BR>
+ </BR>
+
+Bu durumda olan öğrencilerimiz <B>
+ 26 Şubat 2020 Çarşamba günü saat: 23:59'a kadar (1 gün)  </B>
+ ders kayıtlarını yapabilecek ve öğrenim ücreti/katkı payı ücretlerini yatırabileceklerdir. </BR>
+ </BR>
+
+
+İlgili öğrencilerimize önemle duyurulur. </BR>
+ </BR>
+
+
+Öğrenci İşleri Daire Başkanlığı
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            ERCİYES ÜNİVERSİTESİ ÖĞRENCİ MEMNUNİYET ANKETİ
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">Üniversitemizin çok değerli öğrencisi,<BR>
+Bu anket, Erciyes Üniversitesi öğrencilerinin memnuniyet düzeylerini ölçmek amacıyla hazırlanmıştır.<BR>
+Anket verileri, üniversitemizde sizlere sunulan hizmetlerin kalitesinin iyileştirilmesi amacıyla kullanılacaktır. Ankete vereceğiniz doğru ve samimi cevaplar araştırma bulgularının anlamlı olmasını bakımından son derece önemlidir.<BR>
+Ankette kimlik bilgileriniz istenmeyip, kişisel bilgilerinizin gizliliği korunacaktır.
+<BR>
+
+Katılımınız için çok teşekkürler. <BR><BR>
+
+<B>Prof. Dr. Mustafa Çalış</B><BR>
+<B>Rektör</B><BR><BR>
+
+
+<a href=' http://ankets.erciyes.edu.tr/index.php/586229?lang=tr' target=_blank>Ankete katılmak için tıklayınız...</a>
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            YETENEK KAPISI
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal"><a href='https://obisis.erciyes.edu.tr/files/bpwieewp.png'
+ target=_blank><img src='https://obisis.erciyes.edu.tr/files/bpwieewp.png'></img></a>
+</br> <br/> <br/> 
+
+
+Cumhurbaşkanlığı İnsan Kaynakları Ofisi, öğrenci ve mezunların nitelikli istihdamına katkı sağlamak amacıyla bir internet platformu olan 'Yetenek Kapısı'nı öğrenci ve mezunların hizmetine sunmuştur. </BR>
+Link adresi için tıklayınız
+
+<a href=https://www.yetenekkapisi.org/register/
+target=_blank>https://www.yetenekkapisi.org/register/
+</a>
+
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            2020 YILI TAYVAN BURSLARI
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">Tayvan - Türkiye arasındaki ilişkilerin geliştirilmesi, kültür ve eğitim alışverişinin yapılması amacı ile Tayvan Hükümeti tarafından her yıl karşılıksız olarak burs verilmektedir.
+<br><br>
+Son Başvuru Tarihi:<b> 31 Mart 2020 </b>
+<br><br>
+Detaylı Bilgi İçin aşağıdaki linke tıklayınız.
+<strong><font color=red><a href='https://roc-taiwan.org/tr_tr/index.html' target=_blank>https://roc-taiwan.org/tr_tr/index.html</a></font></strong>
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            2019-2020 BAHAR DÖNEMİ DERS KAYITLARI
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal"><br/> <b><font color=red>
+2019-2020 Bahar Dönemi Ders Kayıtlarında önce Katkı Payı / Öğrenim Ücreti (Harç) Ödemesi gereken öğrencilerimiz ödemelerini yapacaklar sonra ders kaydı yapacaklardır.</b> </font>
+<br/> <br/>
+
+<font color=blue>
+TURİZM FAKÜLTESİ , TURİZM İŞLETMECİLİĞİ ve OTELCİLİK Y.O. 
+</font> <br/> 
+DERS KAYIT  : 13.01.2020 - 19.01.2020   <br/> 
+EKLE ve  SİL : 20.01.2020 -26.01.2020<br/> <br/> 
+
+
+<font color=red>
+VETERİNER FAKÜLTESİ   <br/>
+</FONT>
+DERS KAYIT : 20.01.2020 - 28.01.2020   <br/> 
+EKLE ve SİL : 29.01.2020 -31.01.2020 <br/> <br/>
+
+
+<font color=BLUE>
+DİĞER OKULLAR <br/>
+</FONT>
+DERS KAYIT : 03.02.2020 - 11.02.2020   <br/> 
+EKLE ve SİL : 12.02.2020 -14.02.2020 <br/> <br/>
+<b>
+
+Diğer okullarımız için ders kayıtları  03.02.2020 tarihinde başlayacak ve 11.02.2020 tarihinde bitecektir. Bu öğretim yılında mazeret kayıtları olmayacaktır. Sadece ders kayıt haftasında kaydını yapan öğrenciler için,
+<br/>
+ 12.02.2020 ve 14.02.2020 tarihleri arasında ders silme/ekleme işlemi yapılabilecektir. 
+</b><br/><br/>
+
+Ders kayıtları, sisteme getireceği aşırı yük nedeniyle 4 gruba ayrılarak  farklı saatlerde açılacaktır. *
+<br/> <br/> 
+
+<b>1.Grup 03.02.2020 09:00 ‘da Başlayacak</b>
+<br/>
+İktisadi Ve İdari Bilimler Fakültesi, Edebiyat Fakültesi,Sağlık Bilimleri Fakültesi, Mimarlık Fakültesi 
+
+
+<br/>
+<br/>
+<b>2.Grup 03.02.2020 12:00 ‘da Başlayacak</b>
+<br/>
+
+Fen Fakültesi, İletişim Fakültesi, Eğitim Fakültesi, Güzel Sanatlar Fakültesi, Halil Bayraktar Sağlık Hizmetleri M.Y.O.,  <br/>
+Sivil Havacılık Yüksekokulu, Havacılık ve Uzay Bilimleri Fakültesi,  Adalet Meslek Yüksekokulu,Diş Hekimliği Fakültesi,İlahiyat Fakültesi
+<br/><br/>
+
+
+<b>3.Grup 03.02.2020 15:00 ‘de Başlayacak</b>
+<br/>
+Mühendislik Fakültesi, Spor Bilimleri Fakültesi, Hukuk Fakültesi, Seyrani Ziraat Fakültesi,Eczacılık Fakültesi,Tıp Fakültesi (DÖNEM I) 1.Sınıf Öğrencileri
+
+<br/><br/>
+
+
+<b>4.Grup 03.02.2020 18:00 ‘da Başlayacak</b>
+<br/>
+Fen Bilimleri Enstitüsü, Sağlık Bilimleri Enstitüsü, Sosyal Bilimler Enstitüsü, Güzel Sanatlar Enstitüsü, Eğitim Bilimleri Enstitüsü,Gevher Nesibe Genom ve Kök Hücre Enstitüsü
+<br/>
+<br/>
+
+
+<b><font color=red>"Tüm grupların aynı anda serbest seçmeli dersleri seçebilmeleri için, Serbest seçmeli derslerin seçimi 04.02.2020 saat 10:00 da başlatılacaktır; Serbest Seçmeli ders alacak olan öğrenciler ders kaydını Serbest Seçmeli dersini de seçtikten sonra Danışman onayına gönderecektir.
+</font></b>
+
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            2019-2020 BAHAR DÖNEMİ  DERS KAYITLARI VE HARÇ TAHSİLATI
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal"><b>
+ 2019-2020 Bahar Dönemi Ders Kayıtlarında Katkı Payı / Öğrenim Ücreti (Harç) Ödemesi gereken öğrencilerimiz önce ödemelerini yapacaklar sonra ders kayıtlarını yaparak Danışman onayına gönderecektir. <br/><br/> 
+
+Öğrencilerimiz, Katkı Payı / Öğrenim Ücretleri ödemelerini, T.C. Kimlik Numaralarını kullanarak,  Türkiye’nin her yerindeki Halk Bankası ATM, şubelerinden  ve internet bankacılığını kullanarak<font color=red>
+01.02.2020  Cumartesi günü 08:00 'den </font>
+ itibaren  yapabileceklerdir.
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            İKİNCİ ÖĞRETİM PROGRAMLARI İÇİN YÜZDE 10 LİSTELERİ
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">İkinci Öğretim Programlarımız için yüzde 10 başarı listeleri ilan edilmiş ve harçlara yansıtılmıştır. </br></br>
+
+Yüzde 10 listelerine itiraz etmek isteyen öğrencilerimiz en geç 05.02.2020 Çarşamba günü saat 17:00'ye kadar Rektörlük Genel Evrak birimine giderek dilekçe ile resmi itirazlarını yapacaklardır. <b>
+</br></br>
+
+ Bu tarihten sonra yapılan başvurular değerlendirmeye alınmayacaktır.  </br> </br></b>
+
+
+06.02.2020 Perşembe günü tüm itirazlar değerlendirilip  yüzde 10 listeleri yeniden hesaplanacak ve kesin olarak  onaylanacaktır.
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            “2209-B Sanayiye Yönelik Lisans Araştırma Projeleri” 
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">TÜBİTAK 2209 Üniversite Öğrencileri Araştırma Projeleri Destekleme Programı kapsamında, “2209-B Sanayiye Yönelik Lisans Araştırma Projeleri” destekleme çağrısı başvuruya açılmıştır.
+2209-B çağrısı, üniversitelerde öğrenim görmekte olan lisans öğrencilerinin, sanayinin bir sorununu çözmeyi hedefleyen veya sanayide uygulama potansiyeli olan ürün/yöntem/süreç iyileştirmesi veya geliştirmesi amaçlanmaktadır. 2209 B projelerinde sektör ortağının Teknopark firması veya 5746 sayılı kanuna tabi 
+<BR>
+Ar-Ge Merkezleri :
+
+<a href=https://btgm.sanayi.gov.tr/Handlers/DokumanGetHandler.ashx?dokumanId=57bd4d5a-7f4b-4c41-a103-f5ed7629bef2
+target=_blank>https://btgm.sanayi.gov.tr/Handlers/DokumanGetHandler.ashx?dokumanId=57bd4d5a-7f4b-4c41-a103-f5ed7629bef2</a>
+
+<BR>
+veya
+Tasarım Merkezleri :
+<a href=https://btgm.sanayi.gov.tr/Handlers/DokumanGetHandler.ashx?dokumanId=ff0b857c-3fb8-46a4-ba0b-9a866854eef2
+target=_blank>https://btgm.sanayi.gov.tr/Handlers/DokumanGetHandler.ashx?dokumanId=ff0b857c-3fb8-46a4-ba0b-9a866854eef2</a>
+<BR>
+ bulunan firma olması gerekmektedir. 
+TÜBİTAK 2209 B projelerinin, destek üst limiti 4.000 TL, akademik ve sanayi danışmanları için 1.000 TL’dir. Çağrının son başvuru tarihi 17.01.2020 ve süresi en fazla 12 aydır.
+
+<BR>
+Çağrı Metni:<br>
+
+<a href=https://www.tubitak.gov.tr/sites/default/files/4000/2209-b_cagri_duyurusu_son.pdf
+target=_blank>https://www.tubitak.gov.tr/sites/default/files/4000/2209-b_cagri_duyurusu_son.pdf</a>
+
+<br>
+
+2209 B Başvuru Formu: <br>
+
+<a href=https://www.tubitak.gov.tr/sites/default/files/4000/2209-b_arastirma_onerisi_formu.docx
+target=_blank>https://www.tubitak.gov.tr/sites/default/files/4000/2209-b_arastirma_onerisi_formu.docx</a>
+
+
+<br>
+Başvuru Yapmak İçin: <br>
+
+<a href=https://e-bideb.tubitak.gov.tr/giris.htm
+target=_blank>https://e-bideb.tubitak.gov.tr/giris.htm</a>
+
+
+
+
+
+
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            Öğrenci Kimlik Kartları Hakkında
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">20 ARALIK 2019 TARİHİ İTİBARİYLE YEMEKHANELERDEN ÖĞRENCİ KİMLİĞİNE YAPILAN YÜKLEME İŞLEMİ SONA ERECEKTİR. İÇİNDEKİ BAKİYELERİN 31 ARALIK 2019 TARİHİNE KADAR TÜKETİLMESİ GEREKMEKTEDİR. BU TARİHTEN SONRA YEMEKHANE GEÇİŞLERİ YALNIZCA HALK BANKASI BANK 24 KART İLE YAPILACAĞINDAN, BANKA KARTLARININ TEMİN EDİLMESİ ÖNEMLİDİR.
+
+İLGİLİ ÖĞRENCİLERİMİZE DUYURULUR.
+<BR>
+
+<a href=https://ogrisl.erciyes.edu.tr/DYR/Duyuru-Detay/Ogrenci-Kimlik-Kartlari-ile-Yemekhaneden-Yukleme-I/2420/
+target=_blank>https://ogrisl.erciyes.edu.tr/DYR/Duyuru-Detay/Ogrenci-Kimlik-Kartlari-ile-Yemekhaneden-Yukleme-I/2420/</a>
+
+
+
+
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            Fikir Fabrikası Çok Uluslu Girişimcilik Programına Başvurular Başladı !
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">Birleşmiş Milletler Kalkınma Programı (UNDP) tarafından organize edilen, bu program ile teknoloji geliştirme ya da kullanımı içerikli ticari iş fikirlerine sahip girişimci adayları desteklenecektir. </br> Girişimci adaylarının projelerini olgunlaştırmaları ve ilerletmeleri için ilk aşamada birbirinden değerli eğitimler verilecek olup, akabinde başarılı olan takımlara SERA Kuluçka Merkezi’nde düzenlenecek kuluçka programına katılma hakkı verilecektir.</br> Kuluçka programına katılan takımların iş fikirlerini hayata geçirmeleri için farklı destekler verilmesi de planlanmaktadır. </br> KfW-Alman Kalkınma Bankası tarafından finanse edilen, Erciyes Teknopark ve Başkent Üniversitesi tarafından yürütülen, Fikir Fabrikası Programına Türk Vatandaşları ile geçici koruma altındaki Suriye Vatandaşları katılım gösterebilecektir. </br>
+Programa katılarak iş fikrinizi hayata geçirmek için sizde hızlıca başvurunuzu yapın.</br> <b>
+ KİMLER BAŞVURABİLİR </br></b>
+•	18 yaşından büyük</br>
+•	Geçici koruma altında olan Suriyeliler</br>
+•	Türkiye Cumhuriyeti vatandaşları</br>
+•	Program süresince devamlı katılım sağlayabilecek olan kişiler</br>
+•	Teknoloji tabanlı iş fikri olan ya da teknoloji içerikli girişimcilik potansiyeli olan kişiler</br>
+<b>Eğitimlerin Başlama Tarihi: 9 Aralık 2019</br>
+Başvuru ve Detaylı Bilgi İçin </b> <a href=http://www.fikirfabrikasi.org/
+target=_blank>http://www.fikirfabrikasi.org/</a>
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            FULBRİGHT ABD YÜKSEK LİSANS VE DOKTORA BURSLARI 
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">Fulbright Komisyonu tarafından ABD’de yüksek lisans ve doktora yapma fırsatı tanıyan burslara son başvuru <b> 8 Nisan 2020 </b></br>
+Ayrıntılı Bilgi ve Başvuru İçin <a href= http://fulbright.org.tr/ target=_blank> http://fulbright.org.tr/</a>  
+
+
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            Benim İşim Girişim Yarışması III.Dönem Başvuruları Başladı !
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">Orta Anadolu Kalkınma Ajansı ve Erciyes Teknopark A.Ş. iş birliği ile düzenlenen “Benim İşim Girişim” iş fikri yarışması ile bölgemizde teknoloji geliştirme içerikli, ticari değer taşıyan, yenilikçi iş fikirleri olan girişimci adaylarının, </br> ekipleri ile birlikte iş fikirlerini hayata geçirmelerinin teşvik edilmesi amaçlanmaktadır. </br>
+
+Bu yarışma ile başvuruları alınan yenilikçi iş fikirleri arasından en uygun olanları seçilerek, bir prototipe dönüştürülmesi için malzeme ve hizmet alımları kalemlerinde finans desteği sağlanacaktır. </br>Ayrıca iş fikri sahibi girişimci adaylarına Kayseri’de kurulu bulunan ve Teknopark tarafından işletilen girişimcilik merkezi olan Sera adlı ön kuluçka ve kuluçka hizmetleri de sunulacaktır.</br>
+
+Başvuru Kriterleri</br>
+•	Türkiye Cumhuriyeti vatandaşı olmak</br>
+•	Teknoloji tabanlı, gerçekleştirilebilir, yenilikçi ve ticari değere sahip iş fikri sahibi olmak</br>
+•	Başvuru tarihi itibariyle 18 yaşından gün almış olmak</br>
+•	Hali hazırda herhangi bir şirketin ortaklık yapısında yer almamak</br>
+•	En az 2 kişilik bir ekibe sahip olmak</br>
+
+Bireysel başvuru kabul edilmemektedir.  Her takımın sadece bir iş fikri ile başvuru yapması beklenmektedir.  Birden fazla iş fikri ile başvuru yapan takımların sadece bir projesi ön değerlendirmeden geçirilecektir. </br>
+ Değerlendirme sonucu kabul edilecek ekiplerin eğitim ve kuluçka faaliyetlerine katılmalarında devam şartı aranmaktadır. Şehir dışından başvuran girişimcilerin, ulaşım ve konaklama işlemlerini, kendi imkanları ile gerçekleştirmeleri beklenmektedir.
+
+</BR> Başvuru için <a href=http://www.benimisimgirisim.com/
+target=_blank>http://www.benimisimgirisim.com/</a>
+ </BR> 
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            TÜBİTAK 2209 A/B Başvuruları Başlamıştır
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">Değerli Araştırmacılar;<br>
+TÜBİTAK 2209 Üniversite Öğrencileri Araştırma Projeleri Destekleme Programı kapsamında, “2209-A Üniversite Öğrencileri Araştırma Projeleri” ve “2209-B Sanayiye Yönelik Lisans Araştırma Projeleri” destekleme programları başvuruları başlamıştır.<br>
+Programda bazı yenilikler yapılmıştır;<br>
+•	Yabancı uyruklu öğrenciler proje yürütücüsü olarak başvurabilecektir.<br>
+•	2209-B Lisans bitirme tezi olması zorunluluğu kalkmıştır.<br>
+•	2209-B projelerinde sektör ortağının 4491 sayılı Teknopark firması veya 5746 sayılı kanuna tabi Ar-Ge veya Tasarım merkezleri bulunan firma olması gerekmektedir. <br>
+Ar-Ge Merkezleri Listesi: <br><a href=https://btgm.sanayi.gov.tr/Handlers/DokumanGetHandler.ashx?dokumanId=57bd4d5a-7f4b-4c41-a103-f5ed7629bef2 target=_blank>https://btgm.sanayi.gov.tr/Handlers/DokumanGetHandler.ashx?dokumanId=57bd4d5a-7f4b-4c41-a103-f5ed7629bef2</a> <br>
+Tasarım Merkezleri Listesi : <br><a href=https://btgm.sanayi.gov.tr/Handlers/DokumanGetHandler.ashx?dokumanId=ff0b857c-3fb8-46a4-ba0b-9a866854eef2 target=_blank>https://btgm.sanayi.gov.tr/Handlers/DokumanGetHandler.ashx?dokumanId=ff0b857c-3fb8-46a4-ba0b-9a866854eef2</a><br>
+•	2209-B için eğer talep edildiği takdirde; Erciyes Teknopark bünyesinde bulunan firmalara ETTO tarafından yönlendirme sağlanacaktır. <br>
+•	Başvuru formları değişmiştir. <br>
+2209 A Başvuru Formu: <br><a href=https://www.tubitak.gov.tr/sites/default/files/4000/2209-a_arastirma_onerisi_formu.docx
+target=_blank>https://www.tubitak.gov.tr/sites/default/files/4000/2209-a_arastirma_onerisi_formu.docx</a><br>
+
+2209 B Başvuru Formu: <br><a href=https://www.tubitak.gov.tr/sites/default/files/4000/2209-b_arastirma_onerisi_formu.docx 
+target=_blank>https://www.tubitak.gov.tr/sites/default/files/4000/2209-b_arastirma_onerisi_formu.docx  </a>
+ <br>
+Programların amacı, Üniversitelerde öğrenim görmekte olan lisans öğrencilerini, projeler yoluyla araştırma yapmaya teşvik etmektir.
+ <table border=1>
+    <tr>
+        <td> Çağrı Adı </td>  <td> Bütçe </td> <td> Açılış Tarihi </td>
+        <td> Kapanış Tarihi </td> <td> Çağrı Metni </td>
+    </tr>
+    <tr>
+        <td>2209-A Üniversite Öğrencileri Araştırma Projeleri Destekleme Programı </td> <td>2.500 TL </td> <td>01.10.2019</td>        <td>31.10.2019</td> <td><a href=https://www.tubitak.gov.tr/sites/default/files/4000/2209-a_cagri_duyurusu_0.pdf target=_blank>https://www.tubitak.gov.tr/sites/default/files/4000/2209-a_cagri_duyurusu_0.pdf  </a>
+</td>
+    </tr>
+    <tr>
+        <td>2209-B Sanayiye Yönelik Lisans Araştırma Projeleri Desteği Programı </td> <td>4.000 TL </td> <td>30.09.2019</td>    <td>31.10.2019</td> <td><a href=https://www.tubitak.gov.tr/sites/default/files/4000/2209-b_cagri_duyurusu_son.pdf target=_blank>https://www.tubitak.gov.tr/sites/default/files/4000/2209-b_cagri_duyurusu_son.pdf</a>
+</td>
+    </tr>
+</table>
+  
+
+<br><br>
+<U><B>Program Hakkında Detaylı Bilgi İçin:</B></U><br>
+Erciyes Teknoloji Transfer Ofisi<br>
+Proje Destek Hizmetleri Birimi (0352 207 66 66 - <B>68333 – 68348</B>) 
+
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            ÜNİVERSİTELİLER FUTBOL TURNUVASI CUMHURİYET KUPASI
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal"><a href='https://obisis.erciyes.edu.tr/files/futbol2.jpg'
+ target=_blank><img src='https://obisis.erciyes.edu.tr/files/futbol2.jpg'></img></a>
+</br> <br/> <br/> 
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            ERÜ Psikolojik Danışma ve Rehberlik Merkezi (ERREM)
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">ERÜ Psikolojik Danışma ve Rehberlik Merkezi (ERREM) Safiye Çıkrıkçıoğlu Meslek Yüksekokulu Binası 1. katında hizmetlerine devam etmektedir.
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            2.Ulusal Üniversiteler Patent Yarışması Tanıtım Toplantısı
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">
+Değerli Öğrenciler, </br>
+
+Üniversitelerimizde üretilen teknik bilginin patente dönüştürülerek ülke ekonomisinin ve teknolojisinin gelişmesine katkı sağlanması amacıyla Türk Patent ve Marka Kurumu tarafından düzenlenen  </br>
+<b>
+“Patentle Türkiye”  </b>
+yarışmasının ikincisine başvurular başladı.</br>
+</br>
+
+
+Yarışmayla ilgili başvuru, yarışma prosedürleri, temel patent eğitimi, başvuruda dikkat edilmesi gereken konu başlıkları ile ilgili Erciyes Teknoloji Transfer Ofisi Fikri Haklar Birimi tarafından Patentle Türkiye yarışmasına ilişkin bilgilendirme toplantısı düzenlenecektir.
+</br>
+
+Düzenlenecek toplantıya yüksek lisans ve doktora da dahil olmak üzere tüm öğrencilerimiz davetlidir.
+</br>
+<b>
+
+Etkinlik Bilgileri</br>
+
+Tarih                                :  10 Ekim 2019 Perşembe </br>
+
+Saat                                 :  14.00-16.00</br>
+
+Yer                                   :  ERÜ Mühendislik Fak. C-Blok Konferans Salonu</br>
+
+Eğitmen                           :  Mesut AKTEKİN (Fikri Haklar Uzmanı)</br>
+
+Etkinlik Kayıt Linki          :  </b>
+<a href=https://docs.google.com/forms/d/e/1FAIpQLSf7_sXpM2PgiPXpnnvCj0fzBM-bM1Mca8zpvPf3iGUD6J3YVg/viewform?vc=0&c=0&w=1/
+
+target=_blank>https://kisaltt.com/W9SJZ</a>
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            Benim İşim Girişim Yarışması II.Dönem Final Jürisi  ve Ödül Töreni
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">Erciyes Teknopark ve Orta Anadolu Kalkınma Ajansı (ORAN) iş birliği ile düzenlenen “Benim İşim Girişim” yarışmasında sona gelindi. Benim İşim Girişim İş Fikri Yarışması Final Günü /Demo Day etkinliğinde jüri değerlendirmesi sonrasında en iyi üç takım seçiliyor. </BR>
+
+Benim İşim Girişim Yarışması II.Dönem Final Jürisi ve Ödül töreninde sizleri de aramızda görmekten onur duyarız.
+</BR></BR>
+
+
+
+Tarih: 3 Ekim 2019</BR>
+Saat: 14.00</BR>
+Yer: Erciyes Teknopark Tekno 5 Konferans Salonu</BR>
+</BR>
+<U><B>
+Program:</U></BR>
+
+</B>
+14:00 – 14:20 Açılış Konuşmaları
+</BR>
+
+14:20 – 14:40 Proje Sunumları
+</BR>
+
+14:40 – 14:50 III.Dönem İmza Protokolü
+</BR>
+
+14:50 – 15:00 İlk 3 Ekibin Açıklanması
+</BR>
+
+15:00 – 15:30 Kokteyl
+
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            ÖĞRENCİLERİMİZİN DİKKATİNE
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">Öğrenci banka kartları ilgili birimlerde belirtilen tarih aralığında Halk Bankası tarafından dağıtılacaktır.YENİ KAYIT ÖĞRENCİLER ve BANK24JET KARTINI TESLİM ALMAYAN eski öğrenciler (2-3-4-5-6.sınıflar) dağıtım noktalarından kartlarını alabilirler.
+</BR></BR>
+<b>ELLERİNDE MEVCUT BANK24JKET KART BULUNAN ÖĞRENCİLERİN KART İÇİN BAŞVURU YAPMALARINA GEREK YOKTUR. </b>
+</BR></BR>
+Özellikle yemekhane hizmetlerinden yararlanabilmek için kartların alınması önem arz etmektedir. 
+
+
+İlgili öğrencilerimize önemle duyurulur. </BR>
+</BR>
+Not: Ayrıca şubeden dağıtım yapılmayacaktır.</BR>
+</BR>
+
+
+<font color=red>
+16-20 EYLÜL 2019  -  EĞİTİM FAKÜLTESİ , İLAHİYAT FAKÜLTESİ , HUKUK FAKÜLTESİ , ADALET MESLEK YÜKSEKOKULU , HALİL BAYRAKTAR SAĞLIK HİZMETLERİ M.Y.O.
+
+ </BR></BR> </font>
+
+<font color=blue>
+16-24 EYLÜL 2019 -İLETİŞİM FAKÜLTESİ , TIP FAKÜLTESİ
+
+</BR> </BR> </font>
+
+<font color=red>
+16-27 EYLÜL 2019 - MÜHENDİSLİK FAKÜLTESİ  ,FEN BİLİMLERİ ENSTİTÜSÜ
+EDEBİYAT FAKÜLTESİ , FEN FAKÜLTESİ  ,EĞİTİM BİLİMLERİ ENSTİTÜSÜ
+SOSYAL BİLİMLER ENSTİTÜSÜ , İKTİSADİ ve İDARİ BİLİMLER FAKÜLTESİ
+, ÜNİVERSİTE HASTANELERİ BAŞMÜDÜRLÜĞÜ
+
+</BR></BR> </font>
+
+ <font color=BLUE>
+23-24 EYLÜL 2019 - SPOR BİLİMLERİ FAKÜLTESİ (BESYO)
+</BR></BR> </font>
+
+<font color=RED>
+
+23-25 EYLÜL 2019 - SEYRANİ ZİRAAT FAKÜLTESİ , MİMARLIK FAKÜLTESİ
+</BR></BR> </font>
+
+<font color=BLUE>
+23-26 EYLÜL 2019 - DİŞ HEKİMLİĞİ FAKÜLTESİ
+</BR> </BR> </font>
+
+<font color=RED>
+25-26 EYLÜL 2019 - TURİZM FAKÜLTESİ , ECZACILIK FAKÜLTESİ
+</BR> </BR> </font>
+
+<font color=BLUE>
+25-27 EYLÜL 2019 - VETERİNER FAKÜLTESİ
+</BR> </BR> </font>
+
+<font color=RED>
+26-27 EYLÜL 2019 - SAĞLIK BİLİMLERİ FAKÜLTESİ,GÜZEL SANATLAR FAKÜLTESİ
+
+</BR> </BR> </font>
+
+
+
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            YAZ OKULU DERS KAYITLARI DERS KAYITLARI İÇİN EK SÜRE
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">Yaz Okulu Ders Kayıtları <b>30.06.2019 Pazar günü öğlen 12:00'a kadar </b>uzatılmıştır. </br></br>
+<b>DİKKAT: 1 Temmuz Pazartesi günü yaz okulu dersleri başlayacaktır. Bu nedenle kayıtlar son kez uzatılmış olup, yeni bir uzatma söz konusu olmayacaktır.</b></br></br>
+
+Öğrencilerimiz bu süre boyunca derslerini seçebilirler. Ders ücretlerini ise Cumartesi günü  Halk Bankası internet bankacılığı veya banka kartı gerekmeden ATM cihazlarını kullanarak, </br> "Eğitim Ödemeleri" menüsünden "Erciyes Üniversitesi" ni seçerek, T.C. Kimlik numaralarını girip ödemelerini yapabilirler.
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            SAHTE ÖBİSİS MOBİL UYGULAMALARI HAKKINDA
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">Üniversitemizin herhangi bir şekilde öğrenci işleri not durum, kayıt işlemleri için herhangi bir mobil uygulaması yoktur. Android veya IOS marketlerindeki uygulamalar tamamen kurumumuz dışında yazılmış zararlı uygulamalardır. Bu uygulamaları kullanmanız halinde öbisis'te kullanmış olduğunuz şifreniz uygulamayı yazan 3. kişilerin eline geçecektir. <br/><br/>
+
+Bu uygulamaları kullanmış olan öğrencilerimizin, uygulamaları telefonlarından kaldırmaları ve öbisis şifrelerini değiştirmeleri gerekmektedir. Aksi taktirde ele geçirilen şifre ile yapılan işlemler sizin tarafınızdan yapılmış gibi kaydedilecektir. 
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            Pardus- LibreOffice Bilgilendirme Semineri
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">Değerli öğrencilerimiz, </br>
+TÜBİTAK ULAKBİM eğitmenlerinden Sayın Şenol ALDIBAŞ tarafından 24 Mayıs 2019 tarihi 14:00-17:00 saatleri arasında Erciyes Üniversitesi Mühendislik Fakültesi F Blok </br>
+Konferans Salonunda Pardus ve LibreOffice hakkında bilgilendirme semineri yapılacaktır. </br>
+Detaylı Bilgi İçin :</br>
+<a href=https://www.pardus.org.tr/ 
+target=_blank>https://www.pardus.org.tr/ </a>
+</br>
+<a href=https://www.pardus.org.tr/projeler/libreoffice/ 
+target=_blank>https://www.pardus.org.tr/projeler/libreoffice/ </a>
+</br>
+
+ 
+Katılmak isteyen tüm ilgililer <a href=https://forms.gle/VSVraAxKt6t93i7N9/ 
+target=_blank>https://forms.gle/VSVraAxKt6t93i7N9/ </a>
+
+
+ adresinden kayıt olabilirler. </br>
+
+Bilgisayar Bilimleri Uygulama ve Araştırma Merkezi 
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            Üniversitemize Mahallelerden Yeni Ulaşım Güzergahı
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal"><a href='https://obisis.erciyes.edu.tr/files/ulasim.jpg'
+ target=_blank><img src='https://obisis.erciyes.edu.tr/files/ulasim.jpg'></img></a>
+</br> <br/> <br/> 
+
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            Üniversitemizin çok değerli öğrencileri için hazırlanmış olan 2019 yılı  Memnuniyet Anketi 
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal"><a href=' http://ankets.erciyes.edu.tr/index.php/586229?lang=tr' target=_blank>Ankete katılmak için tıklayınız...</a>
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            Ders Kayıt Süresi içerisinde Kayıt Yaptıramayıp Dilekçe ile başvuran öğrenciler için Senato Kararı
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal"><p>Üniversitemiz ders kayıt dönemi süresi içerisinde kayıt yaptırmayan öğrencilerden, mazeretlerini içeren dilekçe ile Öğrenci İşleri Merkezimize başvuran öğrencilerin dilekçeleri Üniversitemiz Senatosunda görüşülmüş olup ilgili öğrenciler (dilekçe ile başvuranlar) için 08.03.2019 ve 11.03.2019 tarihlerinde Ders Kayıt hakkı tanınmıştır.</p>
+
+<p>Senato Kararı ile ilgili Rektörümüz Sayın Prof. Dr. Mustafa Çalış’ın sosyal medya üzerinden yapmış olduğu açıklamaya ulaşmak için <a href="https://twitter.com/RektorProfCalis/status/1103658979572502528" target="_blank">tıklayınız…</a></p>
+
+<p><span style="color:#FF0000">Senatomuz kararı ile ders kayıt hakkı tanınan öğrencilerin<u><strong> 8 Mart 2019 Cuma veya 11 Mart 2019 Pazartesi günü Öğrenci İşleri Merkezimize şahsen </strong></u>başvurmaları gerekmektedir.</span></p>
+
+<p>Öğrenci İşleri Daire Başkanlığı</p>
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            Eğitim Ar-Ge ve İnovasyonda Araştırmacının Rolü ve Araştırmacı Destekleri Eğitimi 
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal"><a href='https://www.erciyes.edu.tr/Etkinlik-Detayi/Ar-Ge-ve-Inovasyonda-Arastirmacinin-Rolu-ve-Arastirmaci-Destekleri-Egi/5568'>
+ <img border="0" src="https://obisis.erciyes.edu.tr/files/ar-ge.jpg" width="100" height="145" align="left" hspace="8" vspace="8"></a> 
+</br> <br/> <br/> 
+
+Detaylı bilgi için : <br/> 
+ <a href=https://www.erciyes.edu.tr/Etkinlik-Detayi/Ar-Ge-ve-Inovasyonda-Arastirmacinin-Rolu-ve-Arastirmaci-Destekleri-Egi/5568 target=_blank>https://www.erciyes.edu.tr/Etkinlik-Detayi/Ar-Ge-ve-Inovasyonda-Arastirmacinin-Rolu-ve-Arastirmaci-Destekleri-Egi/5568</a>
+<br/> 
+
+ 
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            TÜBİTAK-2242 15.000 TL ÖDÜLLÜ ÜNİVERSİTE ÖĞRENCİLERİ ARAŞTIRMA PROJELERİ YARIŞMALARI
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal"> 
+Üniversitelerde öğrenim görmekte olan ön lisans ve lisans öğrencilerinin ülkemizin ihtiyaç duyduğu tüm alanlarda bilimsel çözümler üretmelerini ve bu doğrultuda bilgi ve becerilerini geliştirmelerine yönelik olarak projeler </br>
+ geliştirmelerini teşvik etmek için Üniversite Öğrencileri Araştırma Projeleri Yarışması düzenlenmektedir. 
+</br>
+Başvurular <b>
+14 Şubat-10 Mayıs 2019 </b>
+tarihlerinde <a href=https://e-bideb.tubitak.gov.tr/basvuruacikprogramlar.htm
+target=_blank>https://e-bideb.tubitak.gov.tr/basvuruacikprogramlar.htm</a>
+ adresinden alınacaktır. 
+ </br>
+Yarışma kapsamında bir proje ile aşağıda yer alan kategorilerden yalnızca birine başvuru yapılabilir.
+ <b></br>
+Akıllı Şehirler ve Ulaşım </b></br>
+Şehirlerin sorunlarının çözümü ve şehir halkının yaşam standartlarının arttırılması için altyapı, güvenlik, yönetim vb. konularda geliştirilen akıllı çözümler ile erişilebilir, etkili, verimli ve güvenli ulaştırma sistemlerinin geliştirilmesini hedefleyen projeler bu kategoride değerlendirilir. 
+ <b></br>
+Bilgi ve İletişim Teknolojileri </b></br>
+Bilgi güvenliği, bulut bilişim, büyük veri analitiği, e-öğrenme teknolojileri, mobil uygulamalar, robotik ve mekatronik sistemler, modelleme ve simülasyon, nesnelerin interneti, semantik web teknolojileri, yapay zeka, sensör teknolojileri, e-ticaret vb. konulardaki projeleri kapsar. 
+ <b></br>
+Eğitim </b></br>
+Bu kategori, eğitim alanında yenilikçi ve uygulanabilir fikirler içeren projelere yöneliktir. Eğitimde fırsat eşitliği sağlayacak teknolojik fikirler ile mevcut eğitim materyallerinin geliştirilmesini hedefleyen projeler bu kategoride değerlendirilir .
+ <b></br>
+Enerji ve Çevre </b></br>
+Sürdürülebilir kalkınmanın önünde engel teşkil eden çevre problemlerinin çözümüne yönelik projeler ile enerji verimliliği, alternatif enerji kaynakları, depolama teknolojileri vb. konu başlıklarındaki projeler bu kategorinin kapsamına girer. 
+<b></br> 
+Gıda ve Tarım </b></br>
+Kırsal kalkınmayı ve rekabet edilebilirliği arttırmayı; yeterli ve güvenli gıda üretimini ve erişimini kolaylaştırmayı; gıda israfı ve kayıplarının azaltılmasını; gıdaların işlenmesine, korunmasına ve depolanmasına yönelik yeni sistemler geliştirmeyi hedefleyen projeler bu kategoride yer alır. 
+ <b></br>
+Makine İmalatı ve Otomotiv </b></br>
+Robotik ve mekatronik, makine tasarımı ve imalat teknolojileri, otomasyon ve kontrol sistemleri, ileri malzeme teknolojileri, hibrit ve elektrikli araç teknolojileri, yeni nesil motor teknolojileri vb. konu başlıklarındaki projeler bu alanda değerlendirilir. 
+ <b></br>
+Sağlık </b></br>
+Tıbbi tanı, tedavi ve hastalıkların önlenmesine yönelik yeni ve erişilebilir ürün, metot ve cihazların geliştirilmesini ve sağlık sisteminin sorunlarına çözümler üreterek mevcut koşulları iyileştirmeyi hedefleyen projeler bu kategori kapsamına girer. 
+ <b></br>
+Savunma, Uzay ve Havacılık </b></br>
+Bu kategori, milli güvenlik ihtiyacını karşılamayı ve ülkemizin savunma, havacılık ve uzay sektöründe teknolojik bağımsızlığını sağlamayı hedefleyen; uydu, haberleşme, uzaktan algılama, veri işleme, sensör teknolojileri, savunma bilişimi, silah ve mühimmat teknolojileri vb. alanlarda geliştirilen yenilikçi ve uygulanabilir projeleri kapsar. 
+ <b></br>
+Sosyal Yenilikçilik ve Girişimcilik </b> </br>
+Toplumsal sorunlara çözüm getirmeye yönelik yenilikçi fikirler içeren projeleri kapsamaktadır. Bu kategoride kalkınmaya ve istihdama katkı sağlayacak nitelikte girişim fikirleri ile insan hakları, göç, afet yönetimi, yoksulluk vb. konularda sosyal değişim yaratmayı amaçlayan projeler bu kategoride değerlendirilir. </br></br>
+<b>
+ * Her kategoride başarılı bulunan projeler bölge sergisine davet edilecek ve bölge sergisinde her kategoride dereceye giren proje öğrencilerine ve danışmanlarına 5000 TL'ye varan  ödüller verilecektir.</br></br>
+
+ * Bölge sergisinde her kategoride birincilik ödülü alan projeler Türkiye Finaline davet edilecek ve final sergisinde her kategoride dereceye giren proje öğrencilerine ve danışmanlarına 15.000 TL'ye varan ödüller verilecektir. </br> </br></b>
+ 
+Yarışmalar ile ilgili detaylı bilgilere aşağıdaki linklerden ulaşabilirsiniz:</br>
+
+<a href=http://www.tubitak.gov.tr/sites/default/files/2750/universite_proje_yarismalari_-_sunum.pptx 
+target=_blank>http://www.tubitak.gov.tr/sites/default/files/2750/universite_proje_yarismalari_-_sunum.pptx </a>
+</br></br>
+<a href=http://www.tubitak.gov.tr/sites/default/files/2750/2242_cagri_duyurusu_2019.pdf 
+target=_blank>http://www.tubitak.gov.tr/sites/default/files/2750/2242_cagri_duyurusu_2019.pdf </a>
+</br></br>
+<a href=http://www.tubitak.gov.tr/sites/default/files/2750/2019-universite_yarismalari-afis.pdf
+target=_blank>http://www.tubitak.gov.tr/sites/default/files/2750/2019-universite_yarismalari-afis.pdf
+</a></br></br>
+ 
+YARIŞMA İLE İLGİLİ SORULARINIZ İÇİN
+ </br><b>
+Prof.Dr. Sebahattin ÜNALAN  </br>
+TÜBİTAK-Kayseri Bölge Koordinatörü </br>
+sebahattinunalan@gmail.com
+ </br></br>
+
+Doç.Dr. Oğuz DEMİRYÜREK  </br>
+TÜBİTAK-Kayseri Bölge Koordinatör Yardımcısı</br>
+oguzdemiryurek@gmail.com</br></b>
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            EVLİLİK OKULU IV EĞİTİMLERİ 15 MART 2019’da BAŞLIYOR...
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal"><a href='https://obisis.erciyes.edu.tr/files/evlilik.jpg'
+ target=_blank><img src='https://obisis.erciyes.edu.tr/files/evlilik.jpg'></img></a>
+</br> <br/> <br/> 
+
+Detaylı bilgi için : <br/> 
+ <a href=https://errem.erciyes.edu.tr/Evlilik-Okulu-Basvuru-Formu.html target=_blank>https://errem.erciyes.edu.tr/Evlilik-Okulu-Basvuru-Formu.html</a>
+<br/> 
+ 
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            SÖYLEŞİ
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal"><a href='https://obisis.erciyes.edu.tr/files/RES.jpg'
+ target=_blank><img src='https://obisis.erciyes.edu.tr/files/RES.jpg'></img></a>
+</br> <br/> <br/> 
+
+Detaylı bilgi için : <br/> 
+ <a href=https://www.erciyes.edu.tr/Duyuru-Haber/Tarih-Ve-Medeniyet-Akademisi/11869/
+target=_blank>https://www.erciyes.edu.tr/Duyuru-Haber/Tarih-Ve-Medeniyet-Akademisi/11869/</a>
+<br/> 
+ <a href=https://www.erciyes.edu.tr/Duyuru-Haber/Tarih-Ve-Medeniyet-Akademisi/11868/
+target=_blank>https://www.erciyes.edu.tr/Duyuru-Haber/Tarih-Ve-Medeniyet-Akademisi/11868/</a>
+
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            KAYSERİ ÜNİVERSİTESİ ÖĞRENCİLERİNİN DİKKATİNE!!!
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal"><font color=red>
+DİKKAT: Kayseri Üniversitesi'ne devredilmesi gereken Sosyal Bilimler Enstitü'sünün aşağıdaki birimleri YÖK ile yaşanan teknik bir sıkıntıdan dolayı Kayseri Üniversitesi'ne aktarılamamıştı.<br/>
+Teknik sıkıntıların giderilmesini müteakip aşağıdaki akademik birimlerde okumakta olan öğrenciler Kayseri Üniversitesi'ne aktarılmıştır.<br/> 
+</font><br/>
+
+Muhasebe ve Finans Yönetimi (Y.L.)<br/>
+Uluslararası Ticaret ve Lojistik (Y.L.)<br/>
+Sağlık Yönetimi (Y.L.)<br/>
+Sağlık Yönetimi (Doktora)<br/>
+Sağlık Yönetimi (Tezsiz Y.L.)<br/><br/>
+
+
+Öğrencilerimiz bundan sonra Öbisis ile alakalı tüm işlemlerini ( Ders Kaydı, Not Sorgulama, Staj vb.) artık   <strong><font color=red><a href='http://obisis.kayseri.edu.tr' target=_blank>http://obisis.kayseri.edu.tr</a></font></strong> adresinden yapacaklardır <br/><br/>
+
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            2018-2019 BAHAR DÖNEMİ DERS KAYITLARI
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal"><br/> <b><font color=red>
+2018-2019 Bahar Dönemi Ders Kayıtlarında önce Katkı Payı / Öğrenim Ücreti (Harç) Ödemesi gereken öğrencilerimiz ödemelerini yapacaklar sonra ders kaydı yapacaklardır.</b> </font>
+<br/> <br/>
+
+<font color=blue>
+TURİZM FAKÜLTESİ , TURİZM İŞLETMECİLİĞİ ve OTELCİLİK Y.O. 
+</font> <br/> 
+DERS KAYIT  : 14.01.2019 - 20.01.2019   <br/> 
+EKLE ve  SİL : 21.01.2019 -27.01.2019<br/> <br/> 
+
+
+<font color=red>
+VETERİNER FAKÜLTESİ   <br/>
+</FONT>
+DERS KAYIT : 28.01.2019 - 05.02.2019   <br/> 
+EKLE ve SİL : 06.02.2019 -08.02.2019 <br/> <br/>
+
+<font color=BLUE>
+ECZACILIK FAKÜLTESİ   <br/>
+</FONT>
+DERS KAYIT : 28.01.2019 - 01.02.2019   <br/> 
+EKLE ve SİL : 04.02.2019 -06.02.2019 <br/> <br/>
+
+
+<font color=RED>
+HUKUK FAKÜLTESİ   <br/>
+</FONT>
+DERS KAYIT : 11.02.2019 - 19.02.2019   <br/> 
+EKLE ve SİL : 20.02.2019 -22.02.2019 <br/> <br/>
+
+
+<font color=BLUE>
+DİĞER OKULLAR <br/>
+</FONT>
+DERS KAYIT : 04.02.2019 - 12.02.2019   <br/> 
+EKLE ve SİL : 13.02.2019 -15.02.2019 <br/> <br/>
+<b>
+
+Diğer okullarımız için ders kayıtları  04.02.2019 tarihinde başlayacak ve 12.02.2019 tarihinde bitecektir. Bu öğretim yılında mazeret kayıtları olmayacaktır. Sadece ders kayıt haftasında kaydını yapan öğrenciler için,
+<br/>
+ 13.02.2019 ve 15.02.2019 tarihleri arasında ders silme/ekleme işlemi yapılabilecektir. 
+</b><br/><br/>
+
+Ders kayıtları, sisteme getireceği aşırı yük nedeniyle 4 gruba ayrılarak  farklı saatlerde açılacaktır. *
+<br/> <br/> 
+
+<b>1.Grup 04.02.2019 09:00 ‘de Başlayacak</b>
+<br/>
+İktisadi Ve İdari Bilimler Fakültesi, Edebiyat Fakültesi,Sağlık Bilimleri Fakültesi, Mimarlık Fakültesi 
+<br/><br/>
+
+<b>2.Grup 04.02.2019 12:00 ‘da Başlayacak</b>
+<br/>
+Mühendislik Fakültesi, Spor Bilimleri Fakültesi, Beden Eğitimi Ve Spor Yüksekokulu, Seyrani Ziraat Fakültesi,
+<br/><br/>
+
+<b>3.Grup 04.02.2019 15:00 ‘da Başlayacak</b>
+<br/>
+Fen Fakültesi, İletişim Fakültesi, Eğitim Fakültesi, Güzel Sanatlar Fakültesi, Halil Bayraktar Sağlık Hizmetleri M.Y.O.,  <br/>
+Sivil Havacılık Yüksekokulu, Havacılık ve Uzay Bilimleri Fakültesi,  Adalet Meslek Yüksekokulu,Diş Hekimliği Fakültesi,İlahiyat Fakültesi
+<br/>
+<br/>
+
+<b>4.Grup 04.02.2019 18:00 ‘da Başlayacak</b>
+<br/>
+Fen Bilimleri Enstitüsü, Sağlık Bilimleri Enstitüsü, Sosyal Bilimler Enstitüsü, Güzel Sanatlar Enstitüsü, Eğitim Bilimleri Enstitüsü,Gevher Nesibe Genom ve Kök Hücre Enstitüsü
+<br/>
+<br/>
+
+
+<b><font color=red>"Tüm grupların aynı anda serbest seçmeli dersleri seçebilmeleri için, Serbest seçmeli derslerin seçimi 05.02.2019 saat 10:00 da başlatılacaktır; Serbest Seçmeli ders alacak olan öğrenciler ders kaydını Serbest Seçmeli dersini de seçtikten sonra Danışman onayına gönderecektir.
+</font></b>
+
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            TIP,ECZACILIK ve VETERİNER FAKÜLTESİ HARÇ ÖDEMELERİ
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">Ders kayıtları 28.01.2019 Pazartesi günü başlayacak olan Tıp Fakültesi Dönem 1,2,3,4,5 öğrencileri,Eczacılık Fakültesi ve Veteriner Fakültesi öğrencileri için, harç borcu olan öğrenciler için harç tahsilatı başlatılmıştır. Borcu olan öğrencilerimiz Halkbankası şubelerinden, ATM cihazlarından veya Halkbank internet bankacılığı aracılığı ile ödemelerini yapabilirler.  
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            MERKEZ KÜTÜPHANE ÇALIŞMA SAATLERİ
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">2018-2019 Eğitim Öğretim yılı Akademik Takvimine göre sınav dönemi süresince (24 Aralık – 2018 / 19 Ocak 2019) Kadir Has Merkez Kütüphanemiz  27.12.2018 Tarihinden itibaren hafta içi saat 08.00 : 24.00 arası Cumartesi günleri 09.00 – 24.00 saatleri arası, 15 Temmuz yerleşkesi Kütüphanesi 08.00 22.00 saatleri arasında hizmet verecektir.
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            Türkiye Bilimsel ve Teknolojik Araştırma Kurumu Başkanlığı Uzay Teknolojileri Araştırma Enstitüsü!!!
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">Türkiye olarak üyesi olduğumuz
+Merkezi Çin Halk Cumhuriyeti'nin başkenti Pekin'de bulunan Asya Pasifik Uzay İşbirliği
+Organizasyonu (APSCO) tarafından Çin Hükümeti Burs Programı aracılığıyla 2019 yılı için
+yüksek lisans ve doktora bursları verileceği bildirilmektedir.
+</br></br>
+Detaylı bilgi için : 
+ <a href=http://uzay.tubitak.gov.tr/
+target=_blank>http://uzay.tubitak.gov.tr/</a>
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            Erciyes Üniversitesi Resmi  Sosyal Medya Hesapları
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">Erciyes Üniversitesi Sosyal Medya Resmi Hesapları Aşağıda Belirtildiği Gibidir. Bunların dışında herhangi bir resmi hesapları bulunmamaktadır.
+</BR></BR>
+Facebook Resmi Hesabı :
+<a href=https://www.facebook.com/EruMedya
+target=_blank>https://www.facebook.com/EruMedya</a>
+
+</BR></BR>
+Twitter Resmi Hesabı :
+
+<a href=https://twitter.com/EruMedya?lang=tr target=_blank>https://twitter.com/EruMedya?lang=tr</a>
+
+</BR></BR>
+Youtube Resmi  Hesabı :
+<a href=https://www.youtube.com/user/EruMedya target=_blank>https://www.youtube.com/user/EruMedya</a>
+
+
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            Öbisis Web Portalı Kullanım Kılavuzu
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">Öğrenci Bilgi Sistemi (Öbisis) Kullanım kılavuzunu okumak için <a href="./Files/obisis_web_yardim.doc" target="_blank">tıklayınız.</a>
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            <font color=RED><font size=2> ÖĞRENCİ NUMARASI ve ŞİFRE EDİNME </FONT></FONT>
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">Öğrenci Bilgi Sistemimize obisis.erciyes.edu.tr adresinden girerek <font color=RED><font size=2>  ŞİFREMİ BİLMİYORUM </FONT></FONT> butonunu tıklayınız. 
+</br>
+TC Kimlik Numaranız, Adınız ve Soyadınızı girerek öğrenci numaranızı öğrenebilir yeni OBİSİS şifrenizi belirleyebilirsiniz. 
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            MEZUNİYET İÇİN HAZIRLIK SINIFI ŞARTI
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">Mezun olmak için sadece Hazırlık sınıfı şartını sağlayamayan öğrencilerimizin dikkatine! </br></br>
+
+
+
+Web Öğrenci sayfanızın Mezuniyet sekmesindeki 
+<b>
+
+"YÖK Kararı ile hazırlıktan muaf olarak mezun olmak istiyorum" </b>
+
+onay kutusunu tıklayınız.
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            <div id=blink1><strong>ERÜ ELEKTRONİK DOĞRULAMALI BELGE UYGULAMASI</strong></div>
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal"><p>ER&Uuml; 15.12.2014 tarihinden itibaren elektronik doğrulamalı &ouml;ğrenci belgesi ve not durum belgesi (Transkript) uygulamasına başlama kararı almıştır.</p>
+
+<p><strong>Elektronik Doğrulamalı Belge Nedir: &nbsp;</strong>&Ouml;ğrencilerimizin &Ouml;bisis Web Portali &nbsp;&ldquo;Belge İstek&rdquo; aray&uuml;z&uuml;nden talep edip,&nbsp; &Ouml;bisis&rsquo;in &uuml;rettiği &nbsp;&uuml;zerinde imza,m&uuml;h&uuml;r yerine g&ouml;rselleri&nbsp;ile elektronik doğrulama y&ouml;ntemleri yazılı olan, &nbsp;&ouml;ğrenci belgesi ve not durum belgesidir.</p>
+
+<p><strong><u>Eski Uygulama Şekli:</u></strong></p>
+
+<p>&Ouml;ğrencilerimiz, &Ouml;bisis portali &uuml;zerinden &ldquo;Belge İstek&rdquo;&nbsp; aray&uuml;z&uuml;nden &ouml;ğrenci belgesi ve/veya Not Durum Belgesi talep ediyor, bu istekler biriktiğinde &ouml;ğrenci işleri ofislerinden toplu halde yazdırılıyor ve yazdırıldığını yine &ldquo;Belge İstek&rdquo; aray&uuml;z&uuml;nden takip eden &ouml;ğrencilerimiz &ouml;ğrenci işleri ofisine gidip &Ouml;ğrenci Belgesini ve/veya Not Durum Belgesini alıyorlardı.</p>
+
+<p><strong><u>Yeni Uygulama Şekli:</u></strong></p>
+
+<p>Yeni uygulamada ise &ouml;ğrencilerimiz yine &Ouml;bisis portali &uuml;zerinden &ldquo;Belge İstek&rdquo; aray&uuml;z&uuml;nden &ouml;ğrenci belgesi ve/veya Not Durum Belgesi talep edecek. Talep sırasına g&ouml;re sunucudaki bir servis aracılığı ile bu belgeler &uuml;retilip pdf olarak sisteme kaydedilecektir. &ldquo;Belge İstek&rdquo; aray&uuml;z&uuml;nden &ouml;ğrencilerimiz bu belgelerin &uuml;retildiğini g&ouml;rebilecek ve istediği belgeyi pdf olarak a&ccedil;abilecek ve bilgisayarına / mobil cihazına indirebilecektir.</p>
+
+<p>Elektronik Doğrulamalı Belgede ıslak imza yerine imza g&ouml;rseli kullanılmıştır. Ancak belgenin doğruluk kontrol&uuml; internet aracılığı ile yapılabilir. Bu iki şekilde m&uuml;mk&uuml;n olacaktır.</p>
+
+<p><strong><u>1.Doğrulama Y&ouml;ntemi (İnternet Browser Kullanılarak):</u></strong></p>
+
+<p>Belgeyi verdiğiniz kişi veya kurum belgeyi doğrulamak isterse, belge &uuml;zerindeki a&ccedil;ıklamalar onu y&ouml;nlendirecektir. <a href="http://bd.erciyes.edu.tr/">http://bd.erciyes.edu.tr</a> Belge Doğrulama servisine gidecek, belge &uuml;zerindeki &Ouml;ğrenci Numarası, Doğrulama Kodu ve Pin Kodunu alanlara girip, &ldquo;Doğrula&rdquo; butonuna tıkladığında sistem tarafından b&ouml;yle bir belge verilmiş ise belge ile ilgili &ouml;zet bilgiler ekrana gelecek ve burada istenirse belgenin orjinali g&ouml;r&uuml;nt&uuml;lenebilecek ve/veya indirilebilecektir. Bu şekilde kişi veya kurum elindeki kağıt kopya ile doğrulama aray&uuml;z&uuml;nden indirdiği belgeyi karşılaştırarak doğruluğundan emin olabilecektir.</p>
+
+<p><strong><u>2.Doğrulama Y&ouml;ntemi (Mobil Aygıt Karekod Uygulamaları Kullanılarak):</u></strong></p>
+
+<p>Mobil aygıtlarınıza y&uuml;kleyeceğiniz karekod uygulamaları ile doğrulama yapılabilir.&nbsp; ( Apple Store ve Google Play Store da &uuml;cretsiz uygulamalar mevcuttur. Buralarda &ldquo; qr barcode scanner&rdquo; diyer arama yaparak bulabilirsiniz )</p>
+
+<p>Mobil aygıtınızda karekod uygulamasını &ccedil;alıştırıp, belge &uuml;zerindeki karekod&rsquo;u okuttuğunuzda karekod &uuml;zerindeki link bilgisini okuyan uygulama sizi kendi internet browser&rsquo;ından bu ilgili adresi a&ccedil;maya y&ouml;nlendirecektir. ( Y&uuml;klediğiniz uygulama&nbsp; QR Code Reader ise, bu uygulama ile başlangı&ccedil;ta belge indiremeyebilirsiniz, sebebi&nbsp;browseri uygulama i&ccedil;erisinden a&ccedil;masından kaynaklanmaktadır.&nbsp;Uygulamada Settings men&uuml;s&uuml;nden &quot;Use in App Browser&quot; se&ccedil;imini iptal ederseniz problem&nbsp;giderilecektir.&nbsp;<span style="font-family: &quot;Times New Roman&quot;,serif; font-size: 12pt; mso-fareast-font-family: Calibri; mso-fareast-theme-font: minor-latin; mso-ansi-language: TR; mso-fareast-language: TR; mso-bidi-language: AR-SA;"><strong><span style="color: rgb(31, 73, 125);">&nbsp;</span></strong></span>)Tamam dediğinizde browser <a href="http://bd.erciyes.edu.tr/">http://bd.erciyes.edu.tr</a> doğrulama servisine y&ouml;nlenecek, &ouml;ğrenci numarası, doğrulama kodu ve pin kodu url &uuml;zerinden alındığı i&ccedil;in doğrudan sonu&ccedil; ekranı a&ccedil;ılacaktır. B&ouml;yle bir belge verilmedi ise hata ekranı, verildi ise belgenin &ouml;zet bilgilerini g&ouml;sterir bir ekran a&ccedil;ılacaktır. Bu aray&uuml;zden kişi isterse mobil aygıtına belgenin orjinalini indirebilecek ve belgenin doğruluğunu birebir orjinali ile karşılaştırarak yapabilecektir.</p>
+
+<p><strong><u>&Ouml;rnek Belgeler:</u></strong></p>
+
+<p>Aşağıda denemeniz i&ccedil;in oluşturulmuş d&ouml;rt &ouml;rnek belge bulunmaktadır. Linklere tıklayarak bu belgeleri indirebilir ve deneyebilirsiniz.</p>
+
+<p><a href="http://obisis.erciyes.edu.tr/Files/OGR_BEL_TR.PDF">T&uuml;rk&ccedil;e &Ouml;ğrenci Belgesi</a> , &nbsp;<a href="http://obisis.erciyes.edu.tr/Files/OGR_BEL_EN.PDF">İngilizce &Ouml;ğrenci Belgesi</a> ,&nbsp; <a href="http://obisis.erciyes.edu.tr/Files/NOT_DURUM_TR.PDF">T&uuml;rk&ccedil;e Not Durum Belgesi</a> ,&nbsp; <a href="http://obisis.erciyes.edu.tr/Files/NOT_DURUM_EN.PDF">İngilizce Not Durum Belgesi</a></p>
+</br>
+
+<p><strong>ERÜ REKTÖRLÜĞÜ</strong></p>
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            <u><b><font color=red>TÜM ÖĞRENCİLERİMİZİN DİKKATİNE</font></b></u>
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">Gerektiğinde sizlere ulaşabilmemiz ve sizlere daha iyi hizmet verebilmemiz için adres ve telefon bilgilerinizin güncellemeniz gerekmektedir.
+
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            ÜNİVERSİTEMİZ SOSYAL PAYLAŞIM SİTELERİNDE YERİNİ ALDI
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">Üniversitemizin resmi Facebook ve Twitter hesaplarına ana sayfamızın sol alt köşesindeki ikonlardan ya da aşağıdaki linklerden erişebilirsiniz.
+<br/><br/>
+</b> <a href="https://www.facebook.com/EruMedya" target="_blank"> https://www.facebook.com/EruMedya</a>
+<br/><br/>
+</b> <a href="https://twitter.com/EruMedya" target="_blank"> https://twitter.com/EruMedya</a>
+<br/><br/>
+Kurumumuzun Sosyal Medyada, belirtilen hesaplar dışında hesabı bulunmamaktadır.
+<br/>
+Bilgilerinize sunarız.
+<br/><br/><b>Bilgi İşlem Daire Başkanlığı</b>
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            YÜZDE ON BAŞARI LİSTELERİ NASIL HESAPLANIR?
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal">Yüzde on başarı listeleri oluşturulurken konu hakkında çıkan YÖK Genel Kurulu Kararları baz alınarak, öncelikle listeler hazırlanır. Daha sonra bölüm öğrenci işleri bu listeleri kontrol edip, listenin doğru olduğuna kanaat getirdikleri durumda listeleri onaylarlar.
+<br><br>Listeler onaylanıp ilan edildikten sonra yüzde on indiriminden faydalanan öğrenciler kesinleşir. Öğrencilerin harç bilgileri bankaya gönderilir.  Daha detaylı bilgi için<a href="http://obisis.erciyes.edu.tr/Files/Yüzde On Listeleri Yasal Dayanağı.pdf" target="_blank"<strong><font color=red> tıklayınız.</a></strong></font>
+
+
+
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            JET KARTIMI NASIL KULLANACAĞIM
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal"><a href="http://obisis.erciyes.edu.tr/images/JETKART1.jpg" target="_blank"><img src="https://obisis.erciyes.edu.tr/images/JETKART.jpg" /></a>
+<br/>
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                                
+                
+            
+        </span>
+        <hr />
+    </td>
+	</tr><tr>
+		<td>
+        
+        <span class="NormalBlue">
+            ÖĞRENCİLERİMİZİN DİKKATİNE
+        </span>
+        <span class="Normal">
+            <p>
+                
+                <table id="tb1">
+                    <tr>
+                        <td id="HtmlIcerik" class="Normal"><a href="http://obisis.erciyes.edu.tr/Files/OGRYEMEK.doc" target="_blank"><img src="https://obisis.erciyes.edu.tr/images/yemekhane.jpg" /></a>
+<br/>
+
+                        </td>
+                    </tr>
+                </table>
+            </p>
+                <span id="ctl03_dlDuyuru_ctl76_lblMoreInfo">Daha fazla bilgi için : </span>                
+                <a id="ctl03_dlDuyuru_ctl76_filesLink" href="http://obisis.erciyes.edu.tr/Files/OGRYEMEK.doc" target="_blank">http://obisis.erciyes.edu.tr/Files/OGRYEMEK.doc</a>
+            
+        </span>
+        <hr />
+    </td>
+	</tr>
+</table></td>
+
+                                    
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+        </div>
+    
+<script type="text/javascript">
+//<![CDATA[
+var Page_Validators =  new Array(document.getElementById("ctl02_RadCaptcha1_ctl00"));
+//]]>
+</script>
+
+<script type="text/javascript">
+//<![CDATA[
+var ctl02_RadCaptcha1_ctl00 = document.all ? document.all["ctl02_RadCaptcha1_ctl00"] : document.getElementById("ctl02_RadCaptcha1_ctl00");
+ctl02_RadCaptcha1_ctl00.errormessage = "Girdiğiniz kod geçerli değil!";
+ctl02_RadCaptcha1_ctl00.display = "None";
+ctl02_RadCaptcha1_ctl00.evaluationfunction = "CustomValidatorEvaluateIsValid";
+//]]>
+</script>
+
+
+<script type="text/javascript">
+//<![CDATA[
+(function() {var fn = function() {$get("tcmDefault_HiddenField").value = '';Sys.Application.remove_init(fn);};Sys.Application.add_init(fn);})();
+var Page_ValidationActive = false;
+if (typeof(ValidatorOnLoad) == "function") {
+    ValidatorOnLoad();
+}
+
+function ValidatorOnSubmit() {
+    if (Page_ValidationActive) {
+        return ValidatorCommonOnSubmit();
+    }
+    else {
+        return true;
+    }
+}
+        WebForm_AutoFocus('ctl02_txtboxOgrenciNo');
+document.getElementById('ctl02_RadCaptcha1_ctl00').dispose = function() {
+    Array.remove(Page_Validators, document.getElementById('ctl02_RadCaptcha1_ctl00'));
+}
+Sys.Application.add_init(function() {
+    $create(Telerik.Web.UI.RadCaptcha, {"_audioUrl":"https://obisis.erciyes.edu.tr/Telerik.Web.UI.WebResource.axd?type=cah\u0026isc=true\u0026guid=3770270e-d45b-4643-86a2-8522a8ce7d2c","_enableAudio":true,"_persistCode":false,"clientStateFieldID":"ctl02_RadCaptcha1_ClientState"}, null, null, $get("ctl02_RadCaptcha1"));
+});
+//]]>
+</script>
+</form>
+    <p>
+        &nbsp;</p>
+    <div style="position: fixed; left: 0px; bottom: 0px; width: 100%;">
+        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+            <tr valign="middle">
+                <td align="center" class="HeadAp" colspan="2" valign="bottom">
+                    <span id="lblFooter" class="NormalWhite">Erciyes Üniversitesi e - Öğrenci Bilgi Sistemi © 1999-2020 Bilgi İşlem Daire Başkanlığı Yazılım Grubu</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
